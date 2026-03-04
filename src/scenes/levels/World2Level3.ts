@@ -30,9 +30,11 @@ export class World2Level3 extends GameScene {
     super.create();
 
     this.add.text(4, 4, 'World 2-3: Foggy Arbor', {
-      fontSize: '6px',
+      fontSize: '7px',
       color: '#6baaab',
       fontFamily: 'monospace',
+      stroke: '#000000',
+      strokeThickness: 2,
     }).setScrollFactor(0).setDepth(100);
   }
 

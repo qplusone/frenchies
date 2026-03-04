@@ -31,9 +31,11 @@ export class World4Level3 extends GameScene {
   create(): void {
     super.create();
     this.add.text(4, 4, 'World 4-3: The Birthday Garden', {
-      fontSize: '6px',
+      fontSize: '7px',
       color: '#ffaacc',
       fontFamily: 'monospace',
+      stroke: '#000000',
+      strokeThickness: 2,
     }).setScrollFactor(0).setDepth(100);
 
     // === EASTER EGG: Birthday flower arrangement ===
@@ -85,10 +87,12 @@ export class World4Level3 extends GameScene {
 
     // Celebratory text below
     this.add.text(baseX + 40, baseY + 20, 'Happy Birthday!', {
-      fontSize: '5px',
+      fontSize: '6px',
       fontFamily: 'monospace',
       color: '#ffdd44',
       align: 'center',
+      stroke: '#000000',
+      strokeThickness: 2,
     }).setOrigin(0.5).setDepth(2);
   }
 

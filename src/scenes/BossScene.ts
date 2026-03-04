@@ -216,16 +216,20 @@ export class BossScene extends Phaser.Scene {
 
     // Boss name
     this.bossNameText = this.add.text(GAME_WIDTH / 2, barY - 8, this.boss.bossName, {
-      fontSize: '6px',
+      fontSize: '7px',
       fontFamily: 'monospace',
       color: '#ffffff',
+      stroke: '#000000',
+      strokeThickness: 2,
     }).setOrigin(0.5, 0.5).setDepth(101).setScrollFactor(0);
 
     // Phase indicator
     this.phaseText = this.add.text(GAME_WIDTH / 2 + barWidth / 2 + 8, barY + 2, '', {
-      fontSize: '5px',
+      fontSize: '6px',
       fontFamily: 'monospace',
       color: '#ffdd44',
+      stroke: '#000000',
+      strokeThickness: 1,
     }).setOrigin(0, 0.5).setDepth(101).setScrollFactor(0);
   }
 

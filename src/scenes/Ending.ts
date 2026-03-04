@@ -96,7 +96,7 @@ export class Ending extends Phaser.Scene {
       // Panel 3
       {
         text: 'Poppleton and Zacko rest\nbeneath the willow',
-        fontSize: '7px',
+        fontSize: '8px',
         color: '#e8c4a0',
         showDogs: true,
         sparkle: false,
@@ -123,7 +123,7 @@ export class Ending extends Phaser.Scene {
       // Panel 6 — Dedication (smaller, gentle)
       {
         text: 'With love, from your\ntwo little Frenchies',
-        fontSize: '7px',
+        fontSize: '8px',
         color: '#e8b4b8',
         showDogs: true,
         sparkle: false,
@@ -132,7 +132,7 @@ export class Ending extends Phaser.Scene {
       // Panel 7 — Credits
       {
         text: 'Jardin des Frenchies\nA game made with love\n2026',
-        fontSize: '6px',
+        fontSize: '7px',
         color: '#b8a9c9',
         showDogs: false,
         sparkle: false,
@@ -195,6 +195,8 @@ export class Ending extends Phaser.Scene {
       fontFamily: 'monospace',
       align: 'center',
       lineSpacing: 6,
+      stroke: '#000000',
+      strokeThickness: 2,
     })
       .setOrigin(0.5)
       .setAlpha(0);
@@ -251,9 +253,11 @@ export class Ending extends Phaser.Scene {
       GAME_HEIGHT - 16,
       'Press any key to return',
       {
-        fontSize: '6px',
-        color: '#888888',
+        fontSize: '7px',
+        color: '#aaaaaa',
         fontFamily: 'monospace',
+        stroke: '#000000',
+        strokeThickness: 2,
       },
     )
       .setOrigin(0.5)

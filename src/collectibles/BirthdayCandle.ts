@@ -24,9 +24,11 @@ export class BirthdayCandle extends Collectible {
 
     // Special celebration effect for candles
     const text = this.scene.add.text(this.x, this.y - 16, `Candle ${this.candleIndex + 1}!`, {
-      fontSize: '6px',
+      fontSize: '7px',
       color: '#ffdd44',
       fontFamily: 'monospace',
+      stroke: '#000000',
+      strokeThickness: 2,
     }).setOrigin(0.5);
 
     this.scene.tweens.add({

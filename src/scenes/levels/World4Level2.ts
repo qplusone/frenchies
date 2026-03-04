@@ -34,9 +34,11 @@ export class World4Level2 extends GameScene {
 
     this.add
       .text(4, 4, 'World 4-2: Monet\'s Studio', {
-        fontSize: '6px',
+        fontSize: '7px',
         color: '#6baaab',
         fontFamily: 'monospace',
+        stroke: '#000000',
+        strokeThickness: 2,
       })
       .setScrollFactor(0)
       .setDepth(100);
@@ -95,9 +97,11 @@ export class World4Level2 extends GameScene {
 
       // Party text
       const txt = this.add.text(this.player.x, this.player.y - 30, 'Party Time!', {
-        fontSize: '7px',
+        fontSize: '8px',
         fontFamily: 'monospace',
         color: '#ffdd44',
+        stroke: '#000000',
+        strokeThickness: 2,
       }).setOrigin(0.5).setDepth(50);
       this.tweens.add({
         targets: txt,

@@ -103,6 +103,8 @@ export class TouchControls {
       fontSize: '8px',
       fontFamily: 'monospace',
       color: '#ffffff',
+      stroke: '#000000',
+      strokeThickness: 2,
     }).setOrigin(0.5).setScrollFactor(0).setDepth(201).setAlpha(alpha * 2);
     this.graphics.push(txt as unknown as Phaser.GameObjects.Graphics);
   }

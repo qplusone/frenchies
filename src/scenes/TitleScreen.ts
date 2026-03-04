@@ -80,6 +80,8 @@ export class TitleScreen extends Phaser.Scene {
       fontSize: '10px',
       fontFamily: 'monospace',
       color: '#8a6a2a',
+      stroke: '#000000',
+      strokeThickness: 2,
     }).setOrigin(0.5).setAlpha(0.5);
 
     // Main title
@@ -87,13 +89,17 @@ export class TitleScreen extends Phaser.Scene {
       fontSize: '10px',
       fontFamily: 'monospace',
       color: '#' + PALETTE.softGold.toString(16).padStart(6, '0'),
+      stroke: '#000000',
+      strokeThickness: 2,
     }).setOrigin(0.5);
 
     // -- Subtitle ------------------------------------------------------------
     this.add.text(GAME_WIDTH / 2, titleY + 16, 'A Birthday Adventure', {
-      fontSize: '6px',
+      fontSize: '7px',
       fontFamily: 'monospace',
       color: '#b8b8d0',
+      stroke: '#000000',
+      strokeThickness: 2,
     }).setOrigin(0.5);
 
     // -- Menu ----------------------------------------------------------------
@@ -101,9 +107,11 @@ export class TitleScreen extends Phaser.Scene {
 
     // -- "For Rachel" --------------------------------------------------------
     this.add.text(GAME_WIDTH - 4, GAME_HEIGHT - 4, 'For Rachel', {
-      fontSize: '5px',
+      fontSize: '6px',
       fontFamily: 'monospace',
       color: '#' + PALETTE.lilyPink.toString(16).padStart(6, '0'),
+      stroke: '#000000',
+      strokeThickness: 1,
     }).setOrigin(1, 1).setAlpha(0.55);
 
     // -- Input ---------------------------------------------------------------
@@ -180,6 +188,8 @@ export class TitleScreen extends Phaser.Scene {
         fontSize: '8px',
         fontFamily: 'monospace',
         color: '#aaaaaa',
+        stroke: '#000000',
+        strokeThickness: 2,
       }).setOrigin(0.5);
 
       this.menuItems.push(text);

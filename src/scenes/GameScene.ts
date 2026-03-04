@@ -144,6 +144,9 @@ export class GameScene extends Phaser.Scene {
     // Launch HUD overlay
     this.scene.launch('HUD');
 
+    // Fade-in transition when entering the level
+    this.cameras.main.fadeIn(400, 0, 0, 0);
+
     // Visual effects
     this.fogEffect = new FogEffect(this);
     this.worldParticles = new WorldParticles(this);
@@ -263,12 +266,27 @@ export class GameScene extends Phaser.Scene {
 
   // --- Programmatic level helpers ---
 
+  /** Resolve the ground tile texture key for the current world. */
+  private getGroundTileKey(): string {
+    const worldNum = this.sceneConfig.worldNum ?? 1;
+    const key = `tileset_world${worldNum}`;
+    return this.textures.exists(key) ? key : 'ground_tile';
+  }
+
+  /** Resolve the platform tile texture key for the current world. */
+  private getPlatformTileKey(): string {
+    const worldNum = this.sceneConfig.worldNum ?? 1;
+    const key = `platform_world${worldNum}`;
+    return this.textures.exists(key) ? key : 'platform_tile';
+  }
+
   /** Add a row of ground tiles starting at pixel position (x, y), spanning `widthInTiles` tiles. */
   protected addGroundRow(x: number, y: number, widthInTiles: number): void {
     if (!this.groundGroup) return;
+    const tileKey = this.getGroundTileKey();
     for (let i = 0; i < widthInTiles; i++) {
       this.groundGroup
-        .create(x + i * TILE_SIZE + TILE_SIZE / 2, y + TILE_SIZE / 2, 'ground_tile')
+        .create(x + i * TILE_SIZE + TILE_SIZE / 2, y + TILE_SIZE / 2, tileKey)
         .refreshBody();
     }
   }
@@ -276,13 +294,14 @@ export class GameScene extends Phaser.Scene {
   /** Add a filled ground block from (x, y) spanning widthInTiles x heightInTiles. */
   protected addGroundBlock(x: number, y: number, widthInTiles: number, heightInTiles: number): void {
     if (!this.groundGroup) return;
+    const tileKey = this.getGroundTileKey();
     for (let row = 0; row < heightInTiles; row++) {
       for (let col = 0; col < widthInTiles; col++) {
         this.groundGroup
           .create(
             x + col * TILE_SIZE + TILE_SIZE / 2,
             y + row * TILE_SIZE + TILE_SIZE / 2,
-            'ground_tile',
+            tileKey,
           )
           .refreshBody();
       }
@@ -292,9 +311,10 @@ export class GameScene extends Phaser.Scene {
   /** Add a platform (one-way or solid) at pixel position (x, y). */
   protected addPlatform(x: number, y: number, widthInTiles: number): void {
     if (!this.platformGroup) return;
+    const tileKey = this.getPlatformTileKey();
     for (let i = 0; i < widthInTiles; i++) {
       this.platformGroup
-        .create(x + i * TILE_SIZE + TILE_SIZE / 2, y + TILE_SIZE / 2, 'platform_tile')
+        .create(x + i * TILE_SIZE + TILE_SIZE / 2, y + TILE_SIZE / 2, tileKey)
         .refreshBody();
     }
   }
@@ -362,6 +382,18 @@ export class GameScene extends Phaser.Scene {
       const collectible = this.collectibles.create(spawn.x, spawn.y, textureKey);
       collectible.setData('type', spawn.type);
       collectible.setData('properties', spawn.properties);
+      collectible.setData('baseY', spawn.y);
+
+      // Gentle floating bob animation
+      this.tweens.add({
+        targets: collectible,
+        y: spawn.y - 3,
+        duration: 800 + Math.random() * 400,
+        yoyo: true,
+        repeat: -1,
+        ease: 'Sine.easeInOut',
+        delay: Math.random() * 600,
+      });
     }
 
     this.physics.add.overlap(this.player, this.collectibles, (_player, collectible) => {
@@ -420,9 +452,11 @@ export class GameScene extends Phaser.Scene {
         AudioManager.getInstance().playSFX('collectRare');
         // Float-up notification
         const text = this.add.text(sprite.x, sprite.y - 16, `Candle ${gm.candleCount}/${11}!`, {
-          fontSize: '6px',
+          fontSize: '7px',
           color: '#ffdd44',
           fontFamily: 'monospace',
+          stroke: '#000000',
+          strokeThickness: 2,
         }).setOrigin(0.5).setDepth(100);
         this.tweens.add({
           targets: text,
@@ -512,6 +546,7 @@ export class GameScene extends Phaser.Scene {
   protected setupTriggers(): void {
     for (const trigger of this.triggers) {
       const zone = this.add.zone(trigger.x, trigger.y, trigger.width, trigger.height);
+      zone.setOrigin(0, 0);
       this.physics.add.existing(zone, true);
 
       this.physics.add.overlap(this.player, zone, () => {
@@ -536,9 +571,36 @@ export class GameScene extends Phaser.Scene {
     gm.completeLevel(worldNum, levelNum, gm.macarons);
     AudioManager.getInstance().playSFX('checkpoint');
 
-    // Brief victory flash then return to world map
+    // Brief victory flash
     this.cameras.main.flash(500, 255, 255, 255);
-    this.time.delayedCall(800, () => {
+
+    // "Level Complete!" text overlay (fixed to camera)
+    const camCenterX = this.cameras.main.scrollX + this.cameras.main.width / 2;
+    const camCenterY = this.cameras.main.scrollY + this.cameras.main.height / 2;
+    const completeText = this.add.text(camCenterX, camCenterY, 'Level Complete!', {
+      fontSize: '12px',
+      color: '#ffffff',
+      fontFamily: 'monospace',
+      stroke: '#000000',
+      strokeThickness: 3,
+    }).setOrigin(0.5).setDepth(200).setAlpha(0);
+
+    // Pop-in animation for the text
+    this.tweens.add({
+      targets: completeText,
+      alpha: 1,
+      scaleX: 1.2,
+      scaleY: 1.2,
+      duration: 300,
+      ease: 'Back.easeOut',
+      yoyo: false,
+    });
+
+    // Fade-out transition then return to world map
+    this.time.delayedCall(1200, () => {
+      this.cameras.main.fadeOut(400, 0, 0, 0);
+    });
+    this.time.delayedCall(1600, () => {
       this.scene.stop('HUD');
       this.scene.start('WorldMap');
     });

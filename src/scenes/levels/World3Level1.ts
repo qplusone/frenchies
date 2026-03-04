@@ -24,9 +24,11 @@ export class World3Level1 extends GameScene {
 
     this.add
       .text(4, 4, 'World 3-1: The Mirror Pond', {
-        fontSize: '6px',
+        fontSize: '7px',
         color: '#6baaab',
         fontFamily: 'monospace',
+        stroke: '#000000',
+        strokeThickness: 2,
       })
       .setScrollFactor(0)
       .setDepth(100);
@@ -47,10 +49,12 @@ export class World3Level1 extends GameScene {
     sign.strokeRect(signX - 8, signY - 4, 36, 18);
     // Sign text
     this.add.text(signX + 10, signY + 1, "Rachel's\nPâtisserie", {
-      fontSize: '4px',
+      fontSize: '5px',
       fontFamily: 'monospace',
       color: '#5c3a1a',
       align: 'center',
+      stroke: '#000000',
+      strokeThickness: 1,
     }).setOrigin(0.5, 0).setDepth(6);
   }
 

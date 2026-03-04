@@ -56,6 +56,8 @@ const FROG_EYE_BG = 0xffff00;
 const FROG_PUPIL = 0x000000;
 const FROG_MOUTH = 0x5a2a2a;
 const TONGUE_RED = 0xcc3333;
+const TONGUE_PINK = 0xff8899;
+const JOWL = 0x3a2818;
 
 // ---------------------------------------------------------------------------
 // Poppleton sprite sheet  (128 x 16, 8 frames of 16x16)
@@ -70,48 +72,79 @@ function drawFrenchieBase(
   muzzleColor: number,
   hasWhiteChest: boolean,
 ): void {
-  // Body (round torso)
-  px(g, bodyColor, ox + 4, 6, 8, 6);
-  px(g, bodyColor, ox + 3, 7, 10, 4);
+  // --- Body (rounder torso with tapered edges) ---
+  // Core body: rows y=6..11, wider in the center
+  px(g, bodyColor, ox + 5, 6, 6, 1);   // top of body (narrow)
+  px(g, bodyColor, ox + 4, 7, 8, 1);   // slightly wider
+  px(g, bodyColor, ox + 3, 8, 10, 2);  // widest rows y=8..9
+  px(g, bodyColor, ox + 4, 10, 8, 1);  // taper back
+  px(g, bodyColor, ox + 5, 11, 6, 1);  // bottom of torso (narrow)
+  // Body top highlight (1px lighter on top of body)
+  px(g, lightColor, ox + 5, 6, 6, 1);
+  // Body bottom shadow (1px darker on bottom edge)
+  px(g, darkColor, ox + 5, 11, 6, 1);
 
-  // Head
-  px(g, bodyColor, ox + 4, 3, 8, 5);
-  px(g, bodyColor, ox + 5, 2, 6, 2);
+  // --- Head ---
+  px(g, bodyColor, ox + 4, 3, 8, 4);   // main head block y=3..6
+  px(g, bodyColor, ox + 5, 2, 6, 1);   // top of head y=2
+  // Head top highlight
+  px(g, lightColor, ox + 5, 2, 6, 1);
 
-  // Bat ears (characteristic Frenchie triangle ears)
-  px(g, bodyColor, ox + 3, 0, 3, 4);
-  px(g, bodyColor, ox + 10, 0, 3, 4);
-  // Inner ear (slightly lighter)
-  px(g, lightColor, ox + 4, 1, 1, 2);
-  px(g, lightColor, ox + 11, 1, 1, 2);
+  // --- Bat ears (triangular, wide base tapering to point) ---
+  // Left ear: base 3px wide at y=2, 2px at y=1, 1px tip at y=0
+  px(g, bodyColor, ox + 3, 2, 3, 1);   // base row y=2 (3px wide)
+  px(g, bodyColor, ox + 3, 1, 2, 1);   // middle row y=1 (2px wide)
+  px(g, bodyColor, ox + 3, 0, 1, 1);   // tip y=0 (1px)
+  px(g, darkColor, ox + 3, 0, 1, 1);   // dark outline at tip
+  // Left ear inner
+  px(g, lightColor, ox + 4, 1, 1, 1);  // inner ear highlight
+  px(g, lightColor, ox + 4, 2, 1, 1);
 
-  // Flat muzzle
-  px(g, muzzleColor, ox + 5, 7, 6, 3);
-  px(g, muzzleColor, ox + 6, 6, 4, 1);
+  // Right ear: base 3px wide at y=2, 2px at y=1, 1px tip at y=0
+  px(g, bodyColor, ox + 10, 2, 3, 1);  // base row y=2 (3px wide)
+  px(g, bodyColor, ox + 11, 1, 2, 1);  // middle row y=1 (2px wide)
+  px(g, bodyColor, ox + 12, 0, 1, 1);  // tip y=0 (1px)
+  px(g, darkColor, ox + 12, 0, 1, 1);  // dark outline at tip
+  // Right ear inner
+  px(g, lightColor, ox + 11, 1, 1, 1); // inner ear highlight
+  px(g, lightColor, ox + 11, 2, 1, 1);
 
-  // Eyes
-  px(g, EYE, ox + 5, 4, 2, 2);
-  px(g, EYE, ox + 9, 4, 2, 2);
-  // Eye shine
-  px(g, 0xffffff, ox + 5, 4, 1, 1);
-  px(g, 0xffffff, ox + 9, 4, 1, 1);
+  // --- Flat muzzle ---
+  px(g, muzzleColor, ox + 5, 7, 6, 3); // muzzle block y=7..9
+  px(g, muzzleColor, ox + 6, 6, 4, 1); // muzzle bridge y=6
 
-  // Nose
-  px(g, NOSE, ox + 7, 6, 2, 1);
+  // --- Eyes (with double highlight) ---
+  px(g, EYE, ox + 5, 4, 2, 2);         // left eye
+  px(g, EYE, ox + 9, 4, 2, 2);         // right eye
+  px(g, 0xffffff, ox + 5, 4, 1, 1);    // left eye shine top
+  px(g, 0xcccccc, ox + 6, 5, 1, 1);    // left eye shine bottom (dimmer)
+  px(g, 0xffffff, ox + 9, 4, 1, 1);    // right eye shine top
+  px(g, 0xcccccc, ox + 10, 5, 1, 1);   // right eye shine bottom (dimmer)
 
-  // White chest for Zacko
+  // --- Nose (3px wide) ---
+  px(g, NOSE, ox + 6, 6, 3, 1);
+
+  // --- Jowl marks (tiny dark marks at mouth corners) ---
+  px(g, JOWL, ox + 5, 9, 1, 1);        // left jowl
+  px(g, JOWL, ox + 10, 9, 1, 1);       // right jowl
+
+  // --- Stubby tail (nub on back/right side) ---
+  px(g, bodyColor, ox + 12, 9, 2, 1);  // tail base
+  px(g, bodyColor, ox + 13, 8, 1, 1);  // tail tip (up)
+
+  // --- White chest for Zacko ---
   if (hasWhiteChest) {
-    px(g, WHITE_CHEST, ox + 5, 8, 6, 3);
-    px(g, WHITE_CHEST, ox + 6, 7, 4, 1);
+    px(g, WHITE_CHEST, ox + 6, 7, 4, 1);  // upper chest
+    px(g, WHITE_CHEST, ox + 5, 8, 6, 3);  // main chest patch
   }
 
-  // Front legs
-  px(g, darkColor, ox + 4, 12, 2, 4);
-  px(g, darkColor, ox + 10, 12, 2, 4);
+  // --- Legs ---
+  px(g, darkColor, ox + 4, 12, 2, 3);  // left leg
+  px(g, darkColor, ox + 10, 12, 2, 3); // right leg
 
-  // Feet (slightly wider)
-  px(g, darkColor, ox + 3, 14, 3, 2);
-  px(g, darkColor, ox + 10, 14, 3, 2);
+  // --- Feet (slightly wider) ---
+  px(g, darkColor, ox + 3, 14, 3, 2);  // left foot
+  px(g, darkColor, ox + 10, 14, 3, 2); // right foot
 }
 
 function generatePoppletonSheet(scene: Phaser.Scene): void {
@@ -122,64 +155,162 @@ function generatePoppletonSheet(scene: Phaser.Scene): void {
   const fw = 16;
   const totalWidth = fw * 8;
 
-  // Frame 0: idle standing
+  // Frame 0: idle standing (relaxed, slight belly sag)
   drawFrenchieBase(g, 0, FAWN, FAWN_DARK, FAWN_LIGHT, MUZZLE, false);
+  // Add belly sag: 1px lower body extension
+  px(g, FAWN, 0 + 5, 12, 6, 1);
 
-  // Frame 1: idle (ear wiggle -- ears tilted slightly outward)
+  // Frame 1: idle (ear wiggle + tiny tongue)
   drawFrenchieBase(g, fw, FAWN, FAWN_DARK, FAWN_LIGHT, MUZZLE, false);
   // Override ears: slightly wider spread
-  px(g, FAWN, fw + 2, 0, 3, 4);
-  px(g, FAWN, fw + 11, 0, 3, 4);
-  px(g, FAWN_LIGHT, fw + 3, 1, 1, 2);
-  px(g, FAWN_LIGHT, fw + 12, 1, 1, 2);
+  // Left ear shifted 1px outward
+  px(g, FAWN, fw + 2, 2, 3, 1);        // base at y=2
+  px(g, FAWN, fw + 2, 1, 2, 1);        // mid at y=1
+  px(g, FAWN, fw + 2, 0, 1, 1);        // tip at y=0
+  px(g, FAWN_DARK, fw + 2, 0, 1, 1);   // dark tip
+  px(g, FAWN_LIGHT, fw + 3, 1, 1, 1);  // inner ear
+  px(g, FAWN_LIGHT, fw + 3, 2, 1, 1);
+  // Right ear shifted 1px outward
+  px(g, FAWN, fw + 11, 2, 3, 1);       // base at y=2
+  px(g, FAWN, fw + 12, 1, 2, 1);       // mid at y=1
+  px(g, FAWN, fw + 13, 0, 1, 1);       // tip at y=0
+  px(g, FAWN_DARK, fw + 13, 0, 1, 1);  // dark tip
+  px(g, FAWN_LIGHT, fw + 12, 1, 1, 1); // inner ear
+  px(g, FAWN_LIGHT, fw + 12, 2, 1, 1);
+  // Tiny tongue poking out (1px pink at mouth)
+  px(g, TONGUE_PINK, fw + 7, 10, 2, 1);
 
-  // Frame 2: run (left legs forward)
+  // Frame 2: run (left legs forward, body leaned left 1px)
   {
     const ox = fw * 2;
-    drawFrenchieBase(g, ox, FAWN, FAWN_DARK, FAWN_LIGHT, MUZZLE, false);
-    // Override legs: front-left forward, back-right back
-    // Clear default legs
-    px(g, 0x000000, ox + 3, 12, 4, 4); // clear with bg
-    px(g, 0x000000, ox + 10, 12, 3, 4);
-    // Re-draw body bottom to cover
-    px(g, FAWN, ox + 4, 10, 8, 2);
-    // Left leg forward
-    px(g, FAWN_DARK, ox + 3, 11, 2, 4);
-    px(g, FAWN_DARK, ox + 2, 14, 3, 2);
-    // Right leg back
+    // Body shifted left 1px for lean
+    // Rounded body
+    px(g, FAWN, ox + 4, 6, 6, 1);
+    px(g, FAWN, ox + 3, 7, 8, 1);
+    px(g, FAWN, ox + 2, 8, 10, 2);     // wide center
+    px(g, FAWN, ox + 3, 10, 8, 1);
+    px(g, FAWN, ox + 4, 11, 6, 1);
+    px(g, FAWN_LIGHT, ox + 4, 6, 6, 1); // top highlight
+    px(g, FAWN_DARK, ox + 4, 11, 6, 1); // bottom shadow
+    // Head (shifted left 1px)
+    px(g, FAWN, ox + 3, 3, 8, 4);
+    px(g, FAWN, ox + 4, 2, 6, 1);
+    px(g, FAWN_LIGHT, ox + 4, 2, 6, 1);
+    // Ears (triangular)
+    px(g, FAWN, ox + 2, 2, 3, 1);
+    px(g, FAWN, ox + 2, 1, 2, 1);
+    px(g, FAWN, ox + 2, 0, 1, 1);
+    px(g, FAWN_DARK, ox + 2, 0, 1, 1);
+    px(g, FAWN_LIGHT, ox + 3, 1, 1, 2);
+    px(g, FAWN, ox + 9, 2, 3, 1);
+    px(g, FAWN, ox + 10, 1, 2, 1);
+    px(g, FAWN, ox + 11, 0, 1, 1);
+    px(g, FAWN_DARK, ox + 11, 0, 1, 1);
+    px(g, FAWN_LIGHT, ox + 10, 1, 1, 2);
+    // Muzzle
+    px(g, MUZZLE, ox + 4, 7, 6, 3);
+    px(g, MUZZLE, ox + 5, 6, 4, 1);
+    // Eyes
+    px(g, EYE, ox + 4, 4, 2, 2);
+    px(g, EYE, ox + 8, 4, 2, 2);
+    px(g, 0xffffff, ox + 4, 4, 1, 1);
+    px(g, 0xcccccc, ox + 5, 5, 1, 1);
+    px(g, 0xffffff, ox + 8, 4, 1, 1);
+    px(g, 0xcccccc, ox + 9, 5, 1, 1);
+    // Nose (3px)
+    px(g, NOSE, ox + 5, 6, 3, 1);
+    // Jowls
+    px(g, JOWL, ox + 4, 9, 1, 1);
+    px(g, JOWL, ox + 9, 9, 1, 1);
+    // Tail nub
+    px(g, FAWN, ox + 11, 9, 2, 1);
+    px(g, FAWN, ox + 12, 8, 1, 1);
+    // Left leg forward (dramatic)
+    px(g, FAWN_DARK, ox + 2, 11, 2, 4);
+    px(g, FAWN_DARK, ox + 1, 14, 3, 2);
+    // Right leg back (dramatic)
     px(g, FAWN_DARK, ox + 11, 11, 2, 4);
-    px(g, FAWN_DARK, ox + 11, 14, 3, 2);
+    px(g, FAWN_DARK, ox + 12, 14, 3, 2);
   }
 
-  // Frame 3: run (right legs forward -- mirror leg positions)
+  // Frame 3: run (right legs forward, body leaned right 1px)
   {
     const ox = fw * 3;
-    drawFrenchieBase(g, ox, FAWN, FAWN_DARK, FAWN_LIGHT, MUZZLE, false);
-    px(g, 0x000000, ox + 3, 12, 4, 4);
-    px(g, 0x000000, ox + 10, 12, 3, 4);
-    px(g, FAWN, ox + 4, 10, 8, 2);
-    // Left leg back
-    px(g, FAWN_DARK, ox + 5, 11, 2, 4);
-    px(g, FAWN_DARK, ox + 5, 14, 3, 2);
-    // Right leg forward
-    px(g, FAWN_DARK, ox + 9, 11, 2, 4);
-    px(g, FAWN_DARK, ox + 9, 14, 3, 2);
+    // Body shifted right 1px for lean
+    px(g, FAWN, ox + 6, 6, 6, 1);
+    px(g, FAWN, ox + 5, 7, 8, 1);
+    px(g, FAWN, ox + 4, 8, 10, 2);     // wide center
+    px(g, FAWN, ox + 5, 10, 8, 1);
+    px(g, FAWN, ox + 6, 11, 6, 1);
+    px(g, FAWN_LIGHT, ox + 6, 6, 6, 1); // top highlight
+    px(g, FAWN_DARK, ox + 6, 11, 6, 1); // bottom shadow
+    // Head (shifted right 1px)
+    px(g, FAWN, ox + 5, 3, 8, 4);
+    px(g, FAWN, ox + 6, 2, 6, 1);
+    px(g, FAWN_LIGHT, ox + 6, 2, 6, 1);
+    // Ears
+    px(g, FAWN, ox + 4, 2, 3, 1);
+    px(g, FAWN, ox + 4, 1, 2, 1);
+    px(g, FAWN, ox + 4, 0, 1, 1);
+    px(g, FAWN_DARK, ox + 4, 0, 1, 1);
+    px(g, FAWN_LIGHT, ox + 5, 1, 1, 2);
+    px(g, FAWN, ox + 11, 2, 3, 1);
+    px(g, FAWN, ox + 12, 1, 2, 1);
+    px(g, FAWN, ox + 13, 0, 1, 1);
+    px(g, FAWN_DARK, ox + 13, 0, 1, 1);
+    px(g, FAWN_LIGHT, ox + 12, 1, 1, 2);
+    // Muzzle
+    px(g, MUZZLE, ox + 6, 7, 6, 3);
+    px(g, MUZZLE, ox + 7, 6, 4, 1);
+    // Eyes
+    px(g, EYE, ox + 6, 4, 2, 2);
+    px(g, EYE, ox + 10, 4, 2, 2);
+    px(g, 0xffffff, ox + 6, 4, 1, 1);
+    px(g, 0xcccccc, ox + 7, 5, 1, 1);
+    px(g, 0xffffff, ox + 10, 4, 1, 1);
+    px(g, 0xcccccc, ox + 11, 5, 1, 1);
+    // Nose (3px)
+    px(g, NOSE, ox + 7, 6, 3, 1);
+    // Jowls
+    px(g, JOWL, ox + 6, 9, 1, 1);
+    px(g, JOWL, ox + 11, 9, 1, 1);
+    // Tail nub
+    px(g, FAWN, ox + 13, 9, 2, 1);
+    px(g, FAWN, ox + 14, 8, 1, 1);
+    // Left leg back (dramatic)
+    px(g, FAWN_DARK, ox + 4, 11, 2, 4);
+    px(g, FAWN_DARK, ox + 3, 14, 3, 2);
+    // Right leg forward (dramatic)
+    px(g, FAWN_DARK, ox + 10, 11, 2, 4);
+    px(g, FAWN_DARK, ox + 10, 14, 3, 2);
   }
 
-  // Frame 4: jump (legs tucked up)
+  // Frame 4: jump (ears fully erect/straight up, compact body)
   {
     const ox = fw * 4;
-    // Shift body up 1px to show lift
-    px(g, FAWN, ox + 4, 5, 8, 6);
-    px(g, FAWN, ox + 3, 6, 10, 4);
+    // Compact body shifted up 1px
+    px(g, FAWN, ox + 5, 5, 6, 1);
+    px(g, FAWN, ox + 4, 6, 8, 1);
+    px(g, FAWN, ox + 3, 7, 10, 2);
+    px(g, FAWN, ox + 4, 9, 8, 1);
+    px(g, FAWN, ox + 5, 10, 6, 1);
+    px(g, FAWN_LIGHT, ox + 5, 5, 6, 1);
+    px(g, FAWN_DARK, ox + 5, 10, 6, 1);
     // Head
-    px(g, FAWN, ox + 4, 2, 8, 5);
-    px(g, FAWN, ox + 5, 1, 6, 2);
-    // Ears pointing up
-    px(g, FAWN, ox + 3, 0, 3, 3);
-    px(g, FAWN, ox + 10, 0, 3, 3);
-    px(g, FAWN_LIGHT, ox + 4, 0, 1, 2);
-    px(g, FAWN_LIGHT, ox + 11, 0, 1, 2);
+    px(g, FAWN, ox + 4, 2, 8, 4);
+    px(g, FAWN, ox + 5, 1, 6, 1);
+    px(g, FAWN_LIGHT, ox + 5, 1, 6, 1);
+    // Ears: fully erect, straight up (tall and narrow)
+    // Left ear: 2px wide, 3px tall, straight up from y=-1 (clamped to 0)
+    px(g, FAWN, ox + 4, 1, 2, 1);      // base connects to head
+    px(g, FAWN, ox + 4, 0, 1, 1);      // top pixel
+    px(g, FAWN_DARK, ox + 4, 0, 1, 1); // dark tip
+    px(g, FAWN_LIGHT, ox + 5, 0, 1, 1);// inner ear
+    // Right ear
+    px(g, FAWN, ox + 10, 1, 2, 1);
+    px(g, FAWN, ox + 11, 0, 1, 1);
+    px(g, FAWN_DARK, ox + 11, 0, 1, 1);
+    px(g, FAWN_LIGHT, ox + 10, 0, 1, 1);
     // Muzzle
     px(g, MUZZLE, ox + 5, 6, 6, 3);
     px(g, MUZZLE, ox + 6, 5, 4, 1);
@@ -187,104 +318,159 @@ function generatePoppletonSheet(scene: Phaser.Scene): void {
     px(g, EYE, ox + 5, 3, 2, 2);
     px(g, EYE, ox + 9, 3, 2, 2);
     px(g, 0xffffff, ox + 5, 3, 1, 1);
+    px(g, 0xcccccc, ox + 6, 4, 1, 1);
     px(g, 0xffffff, ox + 9, 3, 1, 1);
-    // Nose
-    px(g, NOSE, ox + 7, 5, 2, 1);
+    px(g, 0xcccccc, ox + 10, 4, 1, 1);
+    // Nose (3px)
+    px(g, NOSE, ox + 6, 5, 3, 1);
+    // Jowls
+    px(g, JOWL, ox + 5, 8, 1, 1);
+    px(g, JOWL, ox + 10, 8, 1, 1);
+    // Tail nub
+    px(g, FAWN, ox + 12, 8, 2, 1);
+    px(g, FAWN, ox + 13, 7, 1, 1);
     // Tucked legs (short, pulled under body)
     px(g, FAWN_DARK, ox + 4, 10, 3, 2);
     px(g, FAWN_DARK, ox + 9, 10, 3, 2);
   }
 
-  // Frame 5: fall (legs spread, ears up)
+  // Frame 5: fall (ears wide/alert, surprised "O" mouth)
   {
     const ox = fw * 5;
     // Body shifted down 1px
-    px(g, FAWN, ox + 4, 7, 8, 6);
-    px(g, FAWN, ox + 3, 8, 10, 4);
+    px(g, FAWN, ox + 5, 7, 6, 1);
+    px(g, FAWN, ox + 4, 8, 8, 1);
+    px(g, FAWN, ox + 3, 9, 10, 2);
+    px(g, FAWN, ox + 4, 11, 8, 1);
+    px(g, FAWN, ox + 5, 12, 6, 1);
+    px(g, FAWN_LIGHT, ox + 5, 7, 6, 1);
+    px(g, FAWN_DARK, ox + 5, 12, 6, 1);
     // Head
-    px(g, FAWN, ox + 4, 4, 8, 5);
-    px(g, FAWN, ox + 5, 3, 6, 2);
-    // Ears pointing upward (alert)
-    px(g, FAWN, ox + 3, 0, 3, 5);
-    px(g, FAWN, ox + 10, 0, 3, 5);
-    px(g, FAWN_LIGHT, ox + 4, 1, 1, 3);
-    px(g, FAWN_LIGHT, ox + 11, 1, 1, 3);
+    px(g, FAWN, ox + 4, 4, 8, 4);
+    px(g, FAWN, ox + 5, 3, 6, 1);
+    px(g, FAWN_LIGHT, ox + 5, 3, 6, 1);
+    // Ears wide/alert (spread out, tall)
+    // Left ear spread outward
+    px(g, FAWN, ox + 2, 3, 3, 1);      // base
+    px(g, FAWN, ox + 2, 2, 2, 1);      // mid
+    px(g, FAWN, ox + 2, 1, 1, 1);      // top
+    px(g, FAWN, ox + 2, 0, 1, 1);      // tip
+    px(g, FAWN_DARK, ox + 2, 0, 1, 1); // dark tip
+    px(g, FAWN_LIGHT, ox + 3, 1, 1, 2);
+    // Right ear spread outward
+    px(g, FAWN, ox + 11, 3, 3, 1);
+    px(g, FAWN, ox + 12, 2, 2, 1);
+    px(g, FAWN, ox + 13, 1, 1, 1);
+    px(g, FAWN, ox + 13, 0, 1, 1);
+    px(g, FAWN_DARK, ox + 13, 0, 1, 1);
+    px(g, FAWN_LIGHT, ox + 12, 1, 1, 2);
     // Muzzle
     px(g, MUZZLE, ox + 5, 8, 6, 3);
     px(g, MUZZLE, ox + 6, 7, 4, 1);
+    // Surprised "O" mouth (small circle in muzzle)
+    px(g, 0x3a2018, ox + 7, 9, 2, 2);  // open mouth "O"
     // Eyes (wider, surprised)
     px(g, EYE, ox + 5, 5, 2, 2);
     px(g, EYE, ox + 9, 5, 2, 2);
     px(g, 0xffffff, ox + 5, 5, 1, 1);
+    px(g, 0xcccccc, ox + 6, 6, 1, 1);
     px(g, 0xffffff, ox + 9, 5, 1, 1);
-    // Nose
-    px(g, NOSE, ox + 7, 7, 2, 1);
-    // Spread legs
+    px(g, 0xcccccc, ox + 10, 6, 1, 1);
+    // Nose (3px)
+    px(g, NOSE, ox + 6, 7, 3, 1);
+    // Tail nub
+    px(g, FAWN, ox + 12, 10, 2, 1);
+    px(g, FAWN, ox + 13, 9, 1, 1);
+    // Spread legs (wide apart)
     px(g, FAWN_DARK, ox + 2, 12, 2, 4);
     px(g, FAWN_DARK, ox + 12, 12, 2, 4);
     px(g, FAWN_DARK, ox + 1, 14, 3, 2);
     px(g, FAWN_DARK, ox + 12, 14, 3, 2);
   }
 
-  // Frame 6: attack (pounce forward)
+  // Frame 6: attack (dynamic lunge, wider open mouth)
   {
     const ox = fw * 6;
-    // Body lunging forward (shifted right)
-    px(g, FAWN, ox + 5, 6, 9, 6);
-    px(g, FAWN, ox + 4, 7, 10, 4);
+    // Body lunging forward (shifted right 2px), rounded
+    px(g, FAWN, ox + 7, 6, 6, 1);
+    px(g, FAWN, ox + 6, 7, 8, 1);
+    px(g, FAWN, ox + 5, 8, 9, 2);
+    px(g, FAWN, ox + 6, 10, 8, 1);
+    px(g, FAWN, ox + 7, 11, 6, 1);
+    px(g, FAWN_LIGHT, ox + 7, 6, 6, 1);
+    px(g, FAWN_DARK, ox + 7, 11, 6, 1);
     // Head pushed forward
-    px(g, FAWN, ox + 6, 3, 8, 5);
-    px(g, FAWN, ox + 7, 2, 6, 2);
-    // Ears back (angled)
-    px(g, FAWN, ox + 4, 1, 3, 3);
-    px(g, FAWN, ox + 12, 1, 3, 3);
-    px(g, FAWN_LIGHT, ox + 5, 1, 1, 2);
-    px(g, FAWN_LIGHT, ox + 13, 1, 1, 2);
-    // Muzzle (mouth slightly open)
-    px(g, MUZZLE, ox + 7, 7, 6, 3);
-    px(g, MUZZLE, ox + 8, 6, 4, 1);
-    px(g, 0x3a2018, ox + 9, 9, 3, 1); // open mouth line
-    // Eyes (focused)
+    px(g, FAWN, ox + 6, 3, 8, 4);
+    px(g, FAWN, ox + 7, 2, 6, 1);
+    px(g, FAWN_LIGHT, ox + 7, 2, 6, 1);
+    // Ears pinned back
+    px(g, FAWN, ox + 4, 2, 3, 1);
+    px(g, FAWN, ox + 4, 1, 2, 1);
+    px(g, FAWN, ox + 4, 0, 1, 1);
+    px(g, FAWN_DARK, ox + 4, 0, 1, 1);
+    px(g, FAWN_LIGHT, ox + 5, 1, 1, 1);
+    px(g, FAWN, ox + 12, 2, 3, 1);
+    px(g, FAWN, ox + 13, 1, 2, 1);
+    px(g, FAWN, ox + 14, 0, 1, 1);
+    px(g, FAWN_DARK, ox + 14, 0, 1, 1);
+    px(g, FAWN_LIGHT, ox + 13, 1, 1, 1);
+    // Muzzle (wide open mouth for lunge)
+    px(g, MUZZLE, ox + 8, 6, 6, 2);    // upper muzzle
+    px(g, 0x3a2018, ox + 9, 8, 5, 2);  // wide open mouth interior
+    px(g, TONGUE_PINK, ox + 10, 9, 3, 1); // tongue visible in open mouth
+    px(g, MUZZLE, ox + 8, 10, 6, 1);   // lower jaw
+    // Eyes (focused, intense)
     px(g, EYE, ox + 7, 4, 2, 2);
     px(g, EYE, ox + 11, 4, 2, 2);
     px(g, 0xffffff, ox + 7, 4, 1, 1);
     px(g, 0xffffff, ox + 11, 4, 1, 1);
-    // Nose
-    px(g, NOSE, ox + 9, 6, 2, 1);
-    // Extended front legs
-    px(g, FAWN_DARK, ox + 3, 11, 2, 3);
-    px(g, FAWN_DARK, ox + 12, 11, 2, 4);
+    // Nose (3px)
+    px(g, NOSE, ox + 9, 6, 3, 1);
+    // Jowls
+    px(g, JOWL, ox + 8, 10, 1, 1);
+    px(g, JOWL, ox + 13, 10, 1, 1);
+    // Extended front legs (lunge pose)
+    px(g, FAWN_DARK, ox + 3, 10, 2, 4);
     px(g, FAWN_DARK, ox + 2, 13, 3, 2);
-    px(g, FAWN_DARK, ox + 12, 14, 3, 2);
+    // Back leg pushing off
+    px(g, FAWN_DARK, ox + 12, 11, 2, 4);
+    px(g, FAWN_DARK, ox + 13, 14, 3, 2);
   }
 
-  // Frame 7: hurt (recoil with white flash areas)
+  // Frame 7: hurt (dramatic recoil, more flash patches)
   {
     const ox = fw * 7;
-    // Body pulled back
-    px(g, FAWN, ox + 3, 7, 8, 6);
-    px(g, FAWN, ox + 2, 8, 10, 4);
-    // Flash overlay patches
-    px(g, HURT_FLASH, ox + 4, 8, 3, 2);
-    px(g, HURT_FLASH, ox + 8, 9, 2, 2);
+    // Body pulled back, rounded
+    px(g, FAWN, ox + 4, 7, 6, 1);
+    px(g, FAWN, ox + 3, 8, 8, 1);
+    px(g, FAWN, ox + 2, 9, 10, 2);
+    px(g, FAWN, ox + 3, 11, 8, 1);
+    px(g, FAWN, ox + 4, 12, 6, 1);
+    // Flash overlay patches (more dramatic -- 5 patches)
+    px(g, HURT_FLASH, ox + 3, 8, 2, 2);  // left shoulder flash
+    px(g, HURT_FLASH, ox + 7, 9, 3, 2);  // belly flash
+    px(g, HURT_FLASH, ox + 10, 8, 2, 1); // right side flash
     // Head tilted back
     px(g, FAWN, ox + 3, 3, 8, 5);
-    px(g, FAWN, ox + 4, 2, 6, 2);
-    px(g, HURT_FLASH, ox + 5, 3, 2, 2);
-    // Ears drooping
-    px(g, FAWN, ox + 2, 1, 3, 3);
-    px(g, FAWN, ox + 9, 1, 3, 3);
+    px(g, FAWN, ox + 4, 2, 6, 1);
+    px(g, HURT_FLASH, ox + 5, 3, 2, 2); // head flash
+    px(g, HURT_FLASH, ox + 9, 4, 2, 1); // second head flash
+    // Ears drooping (flat/sideways)
+    px(g, FAWN, ox + 1, 2, 3, 1);       // left ear droops left
+    px(g, FAWN, ox + 1, 1, 2, 1);
+    px(g, FAWN, ox + 10, 2, 3, 1);      // right ear droops right
+    px(g, FAWN, ox + 11, 1, 2, 1);
     // Muzzle
     px(g, MUZZLE, ox + 4, 7, 6, 2);
-    // Eyes squinting (hurt)
+    // Eyes squinting (hurt -- thin lines)
     px(g, EYE, ox + 4, 4, 3, 1);
     px(g, EYE, ox + 8, 4, 3, 1);
-    // Nose
-    px(g, NOSE, ox + 6, 6, 2, 1);
-    // Legs staggered
-    px(g, FAWN_DARK, ox + 3, 12, 2, 4);
-    px(g, FAWN_DARK, ox + 9, 13, 2, 3);
+    // Nose (3px)
+    px(g, NOSE, ox + 6, 6, 3, 1);
+    // Legs staggered (recoiling)
+    px(g, FAWN_DARK, ox + 3, 12, 2, 3);
     px(g, FAWN_DARK, ox + 2, 14, 3, 2);
+    px(g, FAWN_DARK, ox + 9, 13, 2, 3);
     px(g, FAWN_DARK, ox + 9, 14, 3, 2);
   }
 
@@ -352,61 +538,168 @@ function generateZackoSheet(scene: Phaser.Scene): void {
   const fw = 16;
   const totalWidth = fw * 8;
 
-  // Frame 0: idle standing
+  // Frame 0: idle standing (relaxed, slight belly sag)
   drawFrenchieBase(g, 0, BLACK_BODY, BLACK_DARK, 0x3a3a3a, WHITE_MUZZLE, true);
+  // Add belly sag: 1px lower body extension
+  px(g, BLACK_BODY, 0 + 5, 12, 6, 1);
 
-  // Frame 1: idle (ear wiggle)
+  // Frame 1: idle (ear wiggle + tiny tongue)
   drawFrenchieBase(g, fw, BLACK_BODY, BLACK_DARK, 0x3a3a3a, WHITE_MUZZLE, true);
-  // Ears spread slightly
-  px(g, BLACK_BODY, fw + 2, 0, 3, 4);
-  px(g, BLACK_BODY, fw + 11, 0, 3, 4);
-  px(g, 0x3a3a3a, fw + 3, 1, 1, 2);
-  px(g, 0x3a3a3a, fw + 12, 1, 1, 2);
+  // Override ears: slightly wider spread
+  // Left ear shifted 1px outward
+  px(g, BLACK_BODY, fw + 2, 2, 3, 1);
+  px(g, BLACK_BODY, fw + 2, 1, 2, 1);
+  px(g, BLACK_BODY, fw + 2, 0, 1, 1);
+  px(g, BLACK_DARK, fw + 2, 0, 1, 1);
+  px(g, 0x3a3a3a, fw + 3, 1, 1, 1);
+  px(g, 0x3a3a3a, fw + 3, 2, 1, 1);
+  // Right ear shifted 1px outward
+  px(g, BLACK_BODY, fw + 11, 2, 3, 1);
+  px(g, BLACK_BODY, fw + 12, 1, 2, 1);
+  px(g, BLACK_BODY, fw + 13, 0, 1, 1);
+  px(g, BLACK_DARK, fw + 13, 0, 1, 1);
+  px(g, 0x3a3a3a, fw + 12, 1, 1, 1);
+  px(g, 0x3a3a3a, fw + 12, 2, 1, 1);
+  // Tiny tongue poking out (1px pink at mouth)
+  px(g, TONGUE_PINK, fw + 7, 10, 2, 1);
 
-  // Frame 2: run (left legs forward)
+  // Frame 2: run (left legs forward, body leaned left 1px)
   {
     const ox = fw * 2;
-    drawFrenchieBase(g, ox, BLACK_BODY, BLACK_DARK, 0x3a3a3a, WHITE_MUZZLE, true);
-    px(g, 0x000000, ox + 3, 12, 4, 4);
-    px(g, 0x000000, ox + 10, 12, 3, 4);
-    px(g, BLACK_BODY, ox + 4, 10, 8, 2);
-    // Left leg forward
-    px(g, BLACK_DARK, ox + 3, 11, 2, 4);
-    px(g, BLACK_DARK, ox + 2, 14, 3, 2);
-    // Right leg back
+    // Body shifted left 1px for lean, rounded
+    px(g, BLACK_BODY, ox + 4, 6, 6, 1);
+    px(g, BLACK_BODY, ox + 3, 7, 8, 1);
+    px(g, BLACK_BODY, ox + 2, 8, 10, 2);
+    px(g, BLACK_BODY, ox + 3, 10, 8, 1);
+    px(g, BLACK_BODY, ox + 4, 11, 6, 1);
+    px(g, 0x3a3a3a, ox + 4, 6, 6, 1);     // top highlight
+    px(g, BLACK_DARK, ox + 4, 11, 6, 1);   // bottom shadow
+    // White chest
+    px(g, WHITE_CHEST, ox + 5, 7, 4, 1);
+    px(g, WHITE_CHEST, ox + 4, 8, 6, 3);
+    // Head (shifted left 1px)
+    px(g, BLACK_BODY, ox + 3, 3, 8, 4);
+    px(g, BLACK_BODY, ox + 4, 2, 6, 1);
+    px(g, 0x3a3a3a, ox + 4, 2, 6, 1);
+    // Ears (triangular)
+    px(g, BLACK_BODY, ox + 2, 2, 3, 1);
+    px(g, BLACK_BODY, ox + 2, 1, 2, 1);
+    px(g, BLACK_BODY, ox + 2, 0, 1, 1);
+    px(g, BLACK_DARK, ox + 2, 0, 1, 1);
+    px(g, 0x3a3a3a, ox + 3, 1, 1, 2);
+    px(g, BLACK_BODY, ox + 9, 2, 3, 1);
+    px(g, BLACK_BODY, ox + 10, 1, 2, 1);
+    px(g, BLACK_BODY, ox + 11, 0, 1, 1);
+    px(g, BLACK_DARK, ox + 11, 0, 1, 1);
+    px(g, 0x3a3a3a, ox + 10, 1, 1, 2);
+    // Muzzle
+    px(g, WHITE_MUZZLE, ox + 4, 7, 6, 3);
+    px(g, WHITE_MUZZLE, ox + 5, 6, 4, 1);
+    // Eyes
+    px(g, EYE, ox + 4, 4, 2, 2);
+    px(g, EYE, ox + 8, 4, 2, 2);
+    px(g, 0xffffff, ox + 4, 4, 1, 1);
+    px(g, 0xcccccc, ox + 5, 5, 1, 1);
+    px(g, 0xffffff, ox + 8, 4, 1, 1);
+    px(g, 0xcccccc, ox + 9, 5, 1, 1);
+    // Nose (3px)
+    px(g, NOSE, ox + 5, 6, 3, 1);
+    // Jowls
+    px(g, JOWL, ox + 4, 9, 1, 1);
+    px(g, JOWL, ox + 9, 9, 1, 1);
+    // Tail nub
+    px(g, BLACK_BODY, ox + 11, 9, 2, 1);
+    px(g, BLACK_BODY, ox + 12, 8, 1, 1);
+    // Left leg forward (dramatic)
+    px(g, BLACK_DARK, ox + 2, 11, 2, 4);
+    px(g, BLACK_DARK, ox + 1, 14, 3, 2);
+    // Right leg back (dramatic)
     px(g, BLACK_DARK, ox + 11, 11, 2, 4);
-    px(g, BLACK_DARK, ox + 11, 14, 3, 2);
+    px(g, BLACK_DARK, ox + 12, 14, 3, 2);
   }
 
-  // Frame 3: run (right legs forward)
+  // Frame 3: run (right legs forward, body leaned right 1px)
   {
     const ox = fw * 3;
-    drawFrenchieBase(g, ox, BLACK_BODY, BLACK_DARK, 0x3a3a3a, WHITE_MUZZLE, true);
-    px(g, 0x000000, ox + 3, 12, 4, 4);
-    px(g, 0x000000, ox + 10, 12, 3, 4);
-    px(g, BLACK_BODY, ox + 4, 10, 8, 2);
-    px(g, BLACK_DARK, ox + 5, 11, 2, 4);
-    px(g, BLACK_DARK, ox + 5, 14, 3, 2);
-    px(g, BLACK_DARK, ox + 9, 11, 2, 4);
-    px(g, BLACK_DARK, ox + 9, 14, 3, 2);
+    // Body shifted right 1px for lean
+    px(g, BLACK_BODY, ox + 6, 6, 6, 1);
+    px(g, BLACK_BODY, ox + 5, 7, 8, 1);
+    px(g, BLACK_BODY, ox + 4, 8, 10, 2);
+    px(g, BLACK_BODY, ox + 5, 10, 8, 1);
+    px(g, BLACK_BODY, ox + 6, 11, 6, 1);
+    px(g, 0x3a3a3a, ox + 6, 6, 6, 1);
+    px(g, BLACK_DARK, ox + 6, 11, 6, 1);
+    // White chest
+    px(g, WHITE_CHEST, ox + 7, 7, 4, 1);
+    px(g, WHITE_CHEST, ox + 6, 8, 6, 3);
+    // Head (shifted right 1px)
+    px(g, BLACK_BODY, ox + 5, 3, 8, 4);
+    px(g, BLACK_BODY, ox + 6, 2, 6, 1);
+    px(g, 0x3a3a3a, ox + 6, 2, 6, 1);
+    // Ears
+    px(g, BLACK_BODY, ox + 4, 2, 3, 1);
+    px(g, BLACK_BODY, ox + 4, 1, 2, 1);
+    px(g, BLACK_BODY, ox + 4, 0, 1, 1);
+    px(g, BLACK_DARK, ox + 4, 0, 1, 1);
+    px(g, 0x3a3a3a, ox + 5, 1, 1, 2);
+    px(g, BLACK_BODY, ox + 11, 2, 3, 1);
+    px(g, BLACK_BODY, ox + 12, 1, 2, 1);
+    px(g, BLACK_BODY, ox + 13, 0, 1, 1);
+    px(g, BLACK_DARK, ox + 13, 0, 1, 1);
+    px(g, 0x3a3a3a, ox + 12, 1, 1, 2);
+    // Muzzle
+    px(g, WHITE_MUZZLE, ox + 6, 7, 6, 3);
+    px(g, WHITE_MUZZLE, ox + 7, 6, 4, 1);
+    // Eyes
+    px(g, EYE, ox + 6, 4, 2, 2);
+    px(g, EYE, ox + 10, 4, 2, 2);
+    px(g, 0xffffff, ox + 6, 4, 1, 1);
+    px(g, 0xcccccc, ox + 7, 5, 1, 1);
+    px(g, 0xffffff, ox + 10, 4, 1, 1);
+    px(g, 0xcccccc, ox + 11, 5, 1, 1);
+    // Nose (3px)
+    px(g, NOSE, ox + 7, 6, 3, 1);
+    // Jowls
+    px(g, JOWL, ox + 6, 9, 1, 1);
+    px(g, JOWL, ox + 11, 9, 1, 1);
+    // Tail nub
+    px(g, BLACK_BODY, ox + 13, 9, 2, 1);
+    px(g, BLACK_BODY, ox + 14, 8, 1, 1);
+    // Left leg back (dramatic)
+    px(g, BLACK_DARK, ox + 4, 11, 2, 4);
+    px(g, BLACK_DARK, ox + 3, 14, 3, 2);
+    // Right leg forward (dramatic)
+    px(g, BLACK_DARK, ox + 10, 11, 2, 4);
+    px(g, BLACK_DARK, ox + 10, 14, 3, 2);
   }
 
-  // Frame 4: jump (legs tucked)
+  // Frame 4: jump (ears fully erect, compact body)
   {
     const ox = fw * 4;
-    px(g, BLACK_BODY, ox + 4, 5, 8, 6);
-    px(g, BLACK_BODY, ox + 3, 6, 10, 4);
+    // Compact body shifted up 1px, rounded
+    px(g, BLACK_BODY, ox + 5, 5, 6, 1);
+    px(g, BLACK_BODY, ox + 4, 6, 8, 1);
+    px(g, BLACK_BODY, ox + 3, 7, 10, 2);
+    px(g, BLACK_BODY, ox + 4, 9, 8, 1);
+    px(g, BLACK_BODY, ox + 5, 10, 6, 1);
+    px(g, 0x3a3a3a, ox + 5, 5, 6, 1);
+    px(g, BLACK_DARK, ox + 5, 10, 6, 1);
     // White chest
-    px(g, WHITE_CHEST, ox + 5, 7, 6, 3);
     px(g, WHITE_CHEST, ox + 6, 6, 4, 1);
+    px(g, WHITE_CHEST, ox + 5, 7, 6, 3);
     // Head
-    px(g, BLACK_BODY, ox + 4, 2, 8, 5);
-    px(g, BLACK_BODY, ox + 5, 1, 6, 2);
-    // Ears
-    px(g, BLACK_BODY, ox + 3, 0, 3, 3);
-    px(g, BLACK_BODY, ox + 10, 0, 3, 3);
-    px(g, 0x3a3a3a, ox + 4, 0, 1, 2);
-    px(g, 0x3a3a3a, ox + 11, 0, 1, 2);
+    px(g, BLACK_BODY, ox + 4, 2, 8, 4);
+    px(g, BLACK_BODY, ox + 5, 1, 6, 1);
+    px(g, 0x3a3a3a, ox + 5, 1, 6, 1);
+    // Ears: fully erect, straight up
+    px(g, BLACK_BODY, ox + 4, 1, 2, 1);
+    px(g, BLACK_BODY, ox + 4, 0, 1, 1);
+    px(g, BLACK_DARK, ox + 4, 0, 1, 1);
+    px(g, 0x3a3a3a, ox + 5, 0, 1, 1);
+    px(g, BLACK_BODY, ox + 10, 1, 2, 1);
+    px(g, BLACK_BODY, ox + 11, 0, 1, 1);
+    px(g, BLACK_DARK, ox + 11, 0, 1, 1);
+    px(g, 0x3a3a3a, ox + 10, 0, 1, 1);
     // Muzzle
     px(g, WHITE_MUZZLE, ox + 5, 6, 6, 3);
     px(g, WHITE_MUZZLE, ox + 6, 5, 4, 1);
@@ -414,102 +707,168 @@ function generateZackoSheet(scene: Phaser.Scene): void {
     px(g, EYE, ox + 5, 3, 2, 2);
     px(g, EYE, ox + 9, 3, 2, 2);
     px(g, 0xffffff, ox + 5, 3, 1, 1);
+    px(g, 0xcccccc, ox + 6, 4, 1, 1);
     px(g, 0xffffff, ox + 9, 3, 1, 1);
-    px(g, NOSE, ox + 7, 5, 2, 1);
+    px(g, 0xcccccc, ox + 10, 4, 1, 1);
+    // Nose (3px)
+    px(g, NOSE, ox + 6, 5, 3, 1);
+    // Jowls
+    px(g, JOWL, ox + 5, 8, 1, 1);
+    px(g, JOWL, ox + 10, 8, 1, 1);
+    // Tail nub
+    px(g, BLACK_BODY, ox + 12, 8, 2, 1);
+    px(g, BLACK_BODY, ox + 13, 7, 1, 1);
     // Tucked legs
     px(g, BLACK_DARK, ox + 4, 10, 3, 2);
     px(g, BLACK_DARK, ox + 9, 10, 3, 2);
   }
 
-  // Frame 5: fall (legs spread, ears up)
+  // Frame 5: fall (ears wide/alert, surprised "O" mouth)
   {
     const ox = fw * 5;
-    px(g, BLACK_BODY, ox + 4, 7, 8, 6);
-    px(g, BLACK_BODY, ox + 3, 8, 10, 4);
-    px(g, WHITE_CHEST, ox + 5, 9, 6, 3);
+    // Body shifted down 1px, rounded
+    px(g, BLACK_BODY, ox + 5, 7, 6, 1);
+    px(g, BLACK_BODY, ox + 4, 8, 8, 1);
+    px(g, BLACK_BODY, ox + 3, 9, 10, 2);
+    px(g, BLACK_BODY, ox + 4, 11, 8, 1);
+    px(g, BLACK_BODY, ox + 5, 12, 6, 1);
+    px(g, 0x3a3a3a, ox + 5, 7, 6, 1);
+    px(g, BLACK_DARK, ox + 5, 12, 6, 1);
+    // White chest
     px(g, WHITE_CHEST, ox + 6, 8, 4, 1);
+    px(g, WHITE_CHEST, ox + 5, 9, 6, 3);
     // Head
-    px(g, BLACK_BODY, ox + 4, 4, 8, 5);
-    px(g, BLACK_BODY, ox + 5, 3, 6, 2);
-    // Ears tall
-    px(g, BLACK_BODY, ox + 3, 0, 3, 5);
-    px(g, BLACK_BODY, ox + 10, 0, 3, 5);
-    px(g, 0x3a3a3a, ox + 4, 1, 1, 3);
-    px(g, 0x3a3a3a, ox + 11, 1, 1, 3);
+    px(g, BLACK_BODY, ox + 4, 4, 8, 4);
+    px(g, BLACK_BODY, ox + 5, 3, 6, 1);
+    px(g, 0x3a3a3a, ox + 5, 3, 6, 1);
+    // Ears wide/alert (spread out)
+    px(g, BLACK_BODY, ox + 2, 3, 3, 1);
+    px(g, BLACK_BODY, ox + 2, 2, 2, 1);
+    px(g, BLACK_BODY, ox + 2, 1, 1, 1);
+    px(g, BLACK_BODY, ox + 2, 0, 1, 1);
+    px(g, BLACK_DARK, ox + 2, 0, 1, 1);
+    px(g, 0x3a3a3a, ox + 3, 1, 1, 2);
+    px(g, BLACK_BODY, ox + 11, 3, 3, 1);
+    px(g, BLACK_BODY, ox + 12, 2, 2, 1);
+    px(g, BLACK_BODY, ox + 13, 1, 1, 1);
+    px(g, BLACK_BODY, ox + 13, 0, 1, 1);
+    px(g, BLACK_DARK, ox + 13, 0, 1, 1);
+    px(g, 0x3a3a3a, ox + 12, 1, 1, 2);
     // Muzzle
     px(g, WHITE_MUZZLE, ox + 5, 8, 6, 3);
     px(g, WHITE_MUZZLE, ox + 6, 7, 4, 1);
-    // Eyes
+    // Surprised "O" mouth
+    px(g, 0x3a2018, ox + 7, 9, 2, 2);
+    // Eyes (wider, surprised)
     px(g, EYE, ox + 5, 5, 2, 2);
     px(g, EYE, ox + 9, 5, 2, 2);
     px(g, 0xffffff, ox + 5, 5, 1, 1);
+    px(g, 0xcccccc, ox + 6, 6, 1, 1);
     px(g, 0xffffff, ox + 9, 5, 1, 1);
-    px(g, NOSE, ox + 7, 7, 2, 1);
-    // Spread legs
+    px(g, 0xcccccc, ox + 10, 6, 1, 1);
+    // Nose (3px)
+    px(g, NOSE, ox + 6, 7, 3, 1);
+    // Tail nub
+    px(g, BLACK_BODY, ox + 12, 10, 2, 1);
+    px(g, BLACK_BODY, ox + 13, 9, 1, 1);
+    // Spread legs (wide apart)
     px(g, BLACK_DARK, ox + 2, 12, 2, 4);
     px(g, BLACK_DARK, ox + 12, 12, 2, 4);
     px(g, BLACK_DARK, ox + 1, 14, 3, 2);
     px(g, BLACK_DARK, ox + 12, 14, 3, 2);
   }
 
-  // Frame 6: attack (bark pose -- mouth wide open)
+  // Frame 6: attack (dynamic lunge, wider open mouth with bark effect)
   {
     const ox = fw * 6;
-    // Body
-    px(g, BLACK_BODY, ox + 4, 6, 8, 6);
-    px(g, BLACK_BODY, ox + 3, 7, 10, 4);
-    px(g, WHITE_CHEST, ox + 5, 8, 6, 3);
+    // Body lunging forward, rounded
+    px(g, BLACK_BODY, ox + 7, 6, 6, 1);
+    px(g, BLACK_BODY, ox + 6, 7, 8, 1);
+    px(g, BLACK_BODY, ox + 5, 8, 9, 2);
+    px(g, BLACK_BODY, ox + 6, 10, 8, 1);
+    px(g, BLACK_BODY, ox + 7, 11, 6, 1);
+    px(g, 0x3a3a3a, ox + 7, 6, 6, 1);
+    px(g, BLACK_DARK, ox + 7, 11, 6, 1);
+    // White chest
+    px(g, WHITE_CHEST, ox + 8, 7, 4, 1);
+    px(g, WHITE_CHEST, ox + 7, 8, 6, 3);
     // Head pushed forward
-    px(g, BLACK_BODY, ox + 5, 3, 9, 5);
-    px(g, BLACK_BODY, ox + 6, 2, 7, 2);
-    // Ears back
-    px(g, BLACK_BODY, ox + 3, 1, 3, 3);
-    px(g, BLACK_BODY, ox + 12, 1, 3, 3);
-    // Muzzle wide open (bark!)
-    px(g, WHITE_MUZZLE, ox + 7, 6, 7, 2);
-    px(g, 0xff6666, ox + 8, 7, 5, 2); // open mouth, red inside
-    px(g, WHITE_MUZZLE, ox + 7, 9, 7, 1); // lower jaw
-    // Eyes (intense)
-    px(g, EYE, ox + 6, 4, 2, 2);
-    px(g, EYE, ox + 10, 4, 2, 2);
-    px(g, 0xffffff, ox + 6, 4, 1, 1);
-    px(g, 0xffffff, ox + 10, 4, 1, 1);
-    px(g, NOSE, ox + 9, 5, 2, 1);
-    // Legs braced
-    px(g, BLACK_DARK, ox + 4, 12, 2, 4);
-    px(g, BLACK_DARK, ox + 10, 12, 2, 4);
-    px(g, BLACK_DARK, ox + 3, 14, 3, 2);
-    px(g, BLACK_DARK, ox + 10, 14, 3, 2);
+    px(g, BLACK_BODY, ox + 6, 3, 8, 4);
+    px(g, BLACK_BODY, ox + 7, 2, 6, 1);
+    px(g, 0x3a3a3a, ox + 7, 2, 6, 1);
+    // Ears pinned back
+    px(g, BLACK_BODY, ox + 4, 2, 3, 1);
+    px(g, BLACK_BODY, ox + 4, 1, 2, 1);
+    px(g, BLACK_BODY, ox + 4, 0, 1, 1);
+    px(g, BLACK_DARK, ox + 4, 0, 1, 1);
+    px(g, 0x3a3a3a, ox + 5, 1, 1, 1);
+    px(g, BLACK_BODY, ox + 12, 2, 3, 1);
+    px(g, BLACK_BODY, ox + 13, 1, 2, 1);
+    px(g, BLACK_BODY, ox + 14, 0, 1, 1);
+    px(g, BLACK_DARK, ox + 14, 0, 1, 1);
+    px(g, 0x3a3a3a, ox + 13, 1, 1, 1);
+    // Muzzle (wide open mouth for bark)
+    px(g, WHITE_MUZZLE, ox + 8, 6, 6, 2);     // upper muzzle
+    px(g, 0xff6666, ox + 9, 8, 5, 2);         // wide open mouth interior
+    px(g, TONGUE_PINK, ox + 10, 9, 3, 1);     // tongue visible
+    px(g, WHITE_MUZZLE, ox + 8, 10, 6, 1);    // lower jaw
+    // Eyes (focused, intense)
+    px(g, EYE, ox + 7, 4, 2, 2);
+    px(g, EYE, ox + 11, 4, 2, 2);
+    px(g, 0xffffff, ox + 7, 4, 1, 1);
+    px(g, 0xffffff, ox + 11, 4, 1, 1);
+    // Nose (3px)
+    px(g, NOSE, ox + 9, 6, 3, 1);
+    // Jowls
+    px(g, JOWL, ox + 8, 10, 1, 1);
+    px(g, JOWL, ox + 13, 10, 1, 1);
     // Sound wave lines (white pixels)
     px(g, 0xffffff, ox + 14, 5, 1, 1);
     px(g, 0xffffff, ox + 15, 4, 1, 3);
+    // Extended front legs (lunge pose)
+    px(g, BLACK_DARK, ox + 3, 10, 2, 4);
+    px(g, BLACK_DARK, ox + 2, 13, 3, 2);
+    // Back leg pushing off
+    px(g, BLACK_DARK, ox + 12, 11, 2, 4);
+    px(g, BLACK_DARK, ox + 13, 14, 3, 2);
   }
 
-  // Frame 7: hurt (recoil, flash white)
+  // Frame 7: hurt (dramatic recoil, more flash patches)
   {
     const ox = fw * 7;
-    px(g, BLACK_BODY, ox + 3, 7, 8, 6);
-    px(g, BLACK_BODY, ox + 2, 8, 10, 4);
-    px(g, HURT_FLASH, ox + 4, 8, 3, 2);
-    px(g, HURT_FLASH, ox + 8, 9, 2, 2);
+    // Body pulled back, rounded
+    px(g, BLACK_BODY, ox + 4, 7, 6, 1);
+    px(g, BLACK_BODY, ox + 3, 8, 8, 1);
+    px(g, BLACK_BODY, ox + 2, 9, 10, 2);
+    px(g, BLACK_BODY, ox + 3, 11, 8, 1);
+    px(g, BLACK_BODY, ox + 4, 12, 6, 1);
+    // White chest (still visible in recoil)
     px(g, WHITE_CHEST, ox + 4, 9, 6, 3);
-    // Head
+    // Flash overlay patches (dramatic -- 5 patches)
+    px(g, HURT_FLASH, ox + 3, 8, 2, 2);   // left shoulder flash
+    px(g, HURT_FLASH, ox + 7, 9, 3, 2);   // belly flash
+    px(g, HURT_FLASH, ox + 10, 8, 2, 1);  // right side flash
+    // Head tilted back
     px(g, BLACK_BODY, ox + 3, 3, 8, 5);
-    px(g, BLACK_BODY, ox + 4, 2, 6, 2);
-    px(g, HURT_FLASH, ox + 5, 3, 2, 2);
-    // Ears drooping
-    px(g, BLACK_BODY, ox + 2, 1, 3, 3);
-    px(g, BLACK_BODY, ox + 9, 1, 3, 3);
+    px(g, BLACK_BODY, ox + 4, 2, 6, 1);
+    px(g, HURT_FLASH, ox + 5, 3, 2, 2);  // head flash
+    px(g, HURT_FLASH, ox + 9, 4, 2, 1);  // second head flash
+    // Ears drooping (flat/sideways)
+    px(g, BLACK_BODY, ox + 1, 2, 3, 1);
+    px(g, BLACK_BODY, ox + 1, 1, 2, 1);
+    px(g, BLACK_BODY, ox + 10, 2, 3, 1);
+    px(g, BLACK_BODY, ox + 11, 1, 2, 1);
     // Muzzle
     px(g, WHITE_MUZZLE, ox + 4, 7, 6, 2);
-    // Eyes squinting
+    // Eyes squinting (hurt -- thin lines)
     px(g, EYE, ox + 4, 4, 3, 1);
     px(g, EYE, ox + 8, 4, 3, 1);
-    px(g, NOSE, ox + 6, 6, 2, 1);
-    // Legs staggered
-    px(g, BLACK_DARK, ox + 3, 12, 2, 4);
-    px(g, BLACK_DARK, ox + 9, 13, 2, 3);
+    // Nose (3px)
+    px(g, NOSE, ox + 6, 6, 3, 1);
+    // Legs staggered (recoiling)
+    px(g, BLACK_DARK, ox + 3, 12, 2, 3);
     px(g, BLACK_DARK, ox + 2, 14, 3, 2);
+    px(g, BLACK_DARK, ox + 9, 13, 2, 3);
     px(g, BLACK_DARK, ox + 9, 14, 3, 2);
   }
 

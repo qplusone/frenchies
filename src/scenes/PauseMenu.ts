@@ -45,6 +45,8 @@ export class PauseMenu extends Phaser.Scene {
       fontSize: '8px',
       color: '#4a3728',
       fontFamily: 'monospace',
+      stroke: '#000000',
+      strokeThickness: 2,
     }).setOrigin(0.5);
 
     // Menu items
@@ -62,9 +64,11 @@ export class PauseMenu extends Phaser.Scene {
     const startY = easelY - 20;
     items.forEach((item, i) => {
       const text = this.add.text(easelX, startY + i * 16, item.label, {
-        fontSize: '7px',
+        fontSize: '8px',
         color: '#4a3728',
         fontFamily: 'monospace',
+        stroke: '#000000',
+        strokeThickness: 2,
       }).setOrigin(0.5).setInteractive();
 
       text.on('pointerover', () => {
@@ -82,7 +86,7 @@ export class PauseMenu extends Phaser.Scene {
       easelX - 55,
       startY,
       '>',
-      { fontSize: '7px', color: '#c94c6e', fontFamily: 'monospace' }
+      { fontSize: '8px', color: '#c94c6e', fontFamily: 'monospace', stroke: '#000000', strokeThickness: 2 }
     );
     this.updateSelector();
 

@@ -25,9 +25,11 @@ export class World1Level1 extends GameScene {
     // Level name label
     this.add
       .text(4, 4, 'World 1-1: Lily Pad Lane', {
-        fontSize: '6px',
+        fontSize: '7px',
         color: '#6baaab',
         fontFamily: 'monospace',
+        stroke: '#000000',
+        strokeThickness: 2,
       })
       .setScrollFactor(0)
       .setDepth(100);

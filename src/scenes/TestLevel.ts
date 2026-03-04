@@ -117,9 +117,11 @@ export class TestLevel extends Phaser.Scene {
 
     // Instructions
     this.add.text(4, GAME_HEIGHT - 12, 'Arrows/WASD: Move | Space: Jump | X: Attack | P: Pause', {
-      fontSize: '5px',
+      fontSize: '6px',
       color: '#666666',
       fontFamily: 'monospace',
+      stroke: '#000000',
+      strokeThickness: 1,
     }).setScrollFactor(0).setDepth(100);
 
     // Pause input

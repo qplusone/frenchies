@@ -58,6 +58,7 @@ function hGradient(
 export function generateAllSprites(scene: Phaser.Scene): void {
   generateEnemySprites(scene);
   generateTilesetSprites(scene);
+  generatePlatformTiles(scene);
   generateBackgroundSprites(scene);
   generateUISprites(scene);
   generateMiscSprites(scene);
@@ -81,6 +82,22 @@ function generatePluieSprite(scene: Phaser.Scene): void {
   const body = 0x6b9dab;
   const dark = 0x4a7a8a;
   const hi = 0xaaccdd;
+  const outline = 0x3a5a6a;
+
+  // Dark outline (drawn first, body overwrites interior)
+  // Outline top point
+  px(g, 6, 0, outline); px(g, 9, 0, outline);
+  px(g, 6, 1, outline); px(g, 9, 1, outline);
+  // Outline widening rows
+  px(g, 5, 2, outline); px(g, 10, 2, outline);
+  px(g, 4, 3, outline); px(g, 11, 3, outline);
+  px(g, 3, 4, outline); px(g, 12, 4, outline);
+  px(g, 2, 5, outline); px(g, 13, 5, outline);
+  // Outline main body sides
+  for (let r = 6; r <= 10; r++) { px(g, 2, r, outline); px(g, 13, r, outline); }
+  // Outline bottom
+  px(g, 3, 11, outline); px(g, 12, 11, outline);
+  for (let x = 4; x <= 11; x++) px(g, x, 12, outline);
 
   // Teardrop shape: narrow top, wide bottom
   // Row 0-1: top point
@@ -105,27 +122,29 @@ function generatePluieSprite(scene: Phaser.Scene): void {
   rect(g, 3, 6, 10, 4, body);
   // Highlight left edge
   for (let r = 6; r <= 9; r++) px(g, 3, r, hi);
+  // Extra shimmer highlights on left side
+  px(g, 4, 4, hi);
+  px(g, 4, 6, hi);
+  px(g, 4, 8, hi);
   // Shadow right edge
   for (let r = 6; r <= 9; r++) px(g, 12, r, dark);
 
-  // Eyes on row 7-8
-  px(g, 5, 7, 0xffffff);
-  px(g, 6, 7, 0xffffff);
-  px(g, 9, 7, 0xffffff);
-  px(g, 10, 7, 0xffffff);
+  // Eyes on row 6-8 (larger: 3x2 whites)
+  rect(g, 5, 6, 3, 2, 0xffffff);
+  rect(g, 9, 6, 3, 2, 0xffffff);
   // Pupils
-  px(g, 6, 8, 0x222233);
-  px(g, 10, 8, 0x222233);
+  px(g, 6, 7, 0x222233);
+  px(g, 10, 7, 0x222233);
 
   // Row 10-11: bottom of body
   rect(g, 3, 10, 10, 1, body);
   rect(g, 4, 11, 8, 1, dark);
 
   // Dripping droplets beneath
-  px(g, 5, 12, dark);
-  px(g, 8, 13, dark);
-  px(g, 10, 12, dark);
-  px(g, 6, 14, 0x4a7a8a);
+  px(g, 5, 13, dark);
+  px(g, 8, 14, dark);
+  px(g, 10, 13, dark);
+  px(g, 6, 15, 0x4a7a8a);
   px(g, 9, 15, 0x4a7a8a);
 
   g.generateTexture('pluie_sprite', 16, 16);
@@ -138,6 +157,22 @@ function generateFeuilleFlotter(scene: Phaser.Scene): void {
   const main = 0xc98040;
   const light = 0xd4a057;
   const dark = 0x8a5a30;
+  const outline = 0x6a4a20;
+
+  // Dark outline around leaf edges (drawn first)
+  // Top outline
+  px(g, 4, 1, outline); px(g, 5, 1, outline); px(g, 6, 1, outline);
+  px(g, 7, 1, outline); px(g, 8, 1, outline); px(g, 9, 1, outline); px(g, 10, 1, outline);
+  // Left edge outline
+  px(g, 3, 2, outline); px(g, 2, 3, outline);
+  for (let r = 4; r <= 9; r++) px(g, 2, r, outline);
+  px(g, 3, 10, outline); px(g, 4, 11, outline);
+  // Right edge outline
+  px(g, 11, 2, outline); px(g, 12, 3, outline);
+  for (let r = 4; r <= 9; r++) px(g, 13, r, outline);
+  px(g, 12, 10, outline); px(g, 11, 11, outline);
+  // Bottom outline
+  for (let x = 5; x <= 10; x++) px(g, x, 12, outline);
 
   // Leaf body -- oval shape with curled tips
   // Row 2-3: leaf top
@@ -151,13 +186,13 @@ function generateFeuilleFlotter(scene: Phaser.Scene): void {
   // Vein line down center
   for (let r = 3; r <= 10; r++) px(g, 8, r, dark);
 
-  // Side veins
-  px(g, 5, 5, dark);
-  px(g, 11, 5, dark);
-  px(g, 4, 7, dark);
-  px(g, 12, 7, dark);
-  px(g, 5, 9, dark);
-  px(g, 11, 9, dark);
+  // Side veins (original 3 pairs + 2 more)
+  px(g, 5, 5, dark); px(g, 6, 4, dark);
+  px(g, 11, 5, dark); px(g, 10, 4, dark);
+  px(g, 4, 7, dark); px(g, 5, 6, dark);
+  px(g, 12, 7, dark); px(g, 11, 6, dark);
+  px(g, 5, 9, dark); px(g, 4, 8, dark);
+  px(g, 11, 9, dark); px(g, 12, 8, dark);
 
   // Row 10-11: bottom taper
   rect(g, 4, 10, 8, 1, main);
@@ -174,15 +209,18 @@ function generateFeuilleFlotter(scene: Phaser.Scene): void {
   px(g, 7, 13, dark);
   px(g, 6, 14, dark);
 
-  // Face: tiny eyes and a small smile
-  px(g, 6, 6, 0x332211);
-  px(g, 10, 6, 0x332211);
+  // Face: bigger eyes (2x2 whites) and a smile
+  rect(g, 5, 6, 2, 2, 0xffeedd);
+  rect(g, 9, 6, 2, 2, 0xffeedd);
+  // Pupils
+  px(g, 6, 7, 0x332211);
+  px(g, 10, 7, 0x332211);
   // Smile
-  px(g, 6, 8, 0x332211);
-  px(g, 7, 9, 0x332211);
+  px(g, 6, 9, 0x332211);
+  px(g, 7, 10, 0x332211);
   // (vein at 8 already there)
-  px(g, 9, 9, 0x332211);
-  px(g, 10, 8, 0x332211);
+  px(g, 9, 10, 0x332211);
+  px(g, 10, 9, 0x332211);
 
   g.generateTexture('feuille_flotter', 16, 16);
   g.destroy();
@@ -195,9 +233,30 @@ function generatePapillonGris(scene: Phaser.Scene): void {
   const light = 0xaaaaaa;
   const dark = 0x666666;
   const bodyColor = 0x444444;
+  const outline = 0x555555;
 
-  // Body (center column)
-  rect(g, 7, 3, 2, 10, bodyColor);
+  // Wing outlines (drawn first, wings overwrite interior)
+  // Left wing upper outline
+  px(g, 1, 2, outline); px(g, 1, 3, outline); px(g, 0, 4, outline); px(g, 0, 5, outline);
+  px(g, 0, 6, outline); px(g, 1, 7, outline);
+  for (let x = 2; x <= 6; x++) { px(g, x, 2, outline); px(g, x, 7, outline); }
+  // Left wing lower outline
+  px(g, 1, 8, outline); px(g, 0, 9, outline); px(g, 1, 11, outline);
+  for (let x = 2; x <= 6; x++) px(g, x, 11, outline);
+  // Right wing upper outline
+  px(g, 14, 2, outline); px(g, 14, 3, outline); px(g, 15, 4, outline); px(g, 15, 5, outline);
+  px(g, 15, 6, outline); px(g, 14, 7, outline);
+  for (let x = 9; x <= 13; x++) { px(g, x, 2, outline); px(g, x, 7, outline); }
+  // Right wing lower outline
+  px(g, 14, 8, outline); px(g, 15, 9, outline); px(g, 14, 11, outline);
+  for (let x = 9; x <= 13; x++) px(g, x, 11, outline);
+
+  // Body (3 segments instead of solid column)
+  rect(g, 7, 3, 2, 3, bodyColor);  // Thorax
+  rect(g, 7, 7, 2, 1, 0x555555);   // Segment gap
+  rect(g, 7, 8, 2, 2, bodyColor);  // Abdomen upper
+  rect(g, 7, 10, 2, 1, 0x555555);  // Segment gap
+  rect(g, 7, 11, 2, 2, bodyColor); // Abdomen lower
 
   // Antennae
   px(g, 6, 1, dark);
@@ -227,9 +286,9 @@ function generatePapillonGris(scene: Phaser.Scene): void {
   rect(g, 11, 9, 2, 1, light);
   px(g, 14, 9, dark);
 
-  // Wing spots
-  px(g, 3, 5, dark);
-  px(g, 12, 5, dark);
+  // Wing spots (3 per wing)
+  px(g, 3, 4, dark); px(g, 4, 6, dark); px(g, 3, 9, dark);
+  px(g, 12, 4, dark); px(g, 11, 6, dark); px(g, 12, 9, dark);
 
   // Eyes on body
   px(g, 7, 4, 0xffffff);
@@ -245,6 +304,7 @@ function generatePierreRoulante(scene: Phaser.Scene): void {
   const main = 0x777777;
   const light = 0x999999;
   const dark = 0x555555;
+  const vdark = 0x444444;
 
   // Rounded boulder shape
   // Top
@@ -261,39 +321,46 @@ function generatePierreRoulante(scene: Phaser.Scene): void {
   // Highlight on top-left
   rect(g, 4, 2, 3, 2, light);
   px(g, 3, 4, light);
+  px(g, 2, 5, light);
 
   // Shadow on bottom-right
   rect(g, 10, 10, 3, 2, dark);
   px(g, 12, 9, dark);
+  px(g, 13, 8, dark);
 
-  // Crack lines
-  px(g, 5, 5, dark);
-  px(g, 6, 6, dark);
-  px(g, 6, 7, dark);
-  px(g, 7, 8, dark);
-  px(g, 10, 4, dark);
-  px(g, 11, 5, dark);
-  px(g, 11, 6, dark);
+  // Crack lines (more cracks for texture)
+  // Crack 1: diagonal upper-left
+  px(g, 3, 5, vdark); px(g, 4, 6, vdark); px(g, 4, 7, vdark);
+  // Crack 2: upper-right
+  px(g, 11, 4, vdark); px(g, 12, 5, vdark); px(g, 12, 6, vdark);
+  // Crack 3: middle horizontal
+  px(g, 2, 8, vdark); px(g, 3, 8, vdark); px(g, 4, 9, vdark);
+  // Crack 4: lower right
+  px(g, 10, 11, vdark); px(g, 11, 10, vdark); px(g, 12, 10, vdark);
+  // Crack 5: lower center
+  px(g, 7, 12, vdark); px(g, 8, 12, vdark);
 
-  // Grumpy face
-  // Angry eyes (\ /)
-  px(g, 5, 6, 0xffffff);
-  px(g, 6, 7, 0xffffff);
-  px(g, 10, 6, 0xffffff);
-  px(g, 9, 7, 0xffffff);
-  // Pupils
+  // Grumpy face - more expressive
+  // Larger angry eyes (2x2 whites)
+  rect(g, 5, 6, 2, 2, 0xffffff);
+  rect(g, 9, 6, 2, 2, 0xffffff);
+  // Pupils (2px)
   px(g, 6, 7, 0x222222);
+  px(g, 5, 7, 0x222222);
   px(g, 9, 7, 0x222222);
-  // Brow lines (angry)
+  px(g, 10, 7, 0x222222);
+  // Prominent brow lines (thicker, angry)
+  rect(g, 4, 4, 3, 1, 0x333333);
   px(g, 4, 5, 0x333333);
-  px(g, 5, 6, 0x333333);
+  rect(g, 9, 4, 3, 1, 0x333333);
   px(g, 11, 5, 0x333333);
-  px(g, 10, 6, 0x333333);
-  // Frown
-  px(g, 6, 10, 0x333333);
+  // Frown (wider)
+  px(g, 5, 10, 0x333333);
+  px(g, 6, 11, 0x333333);
   px(g, 7, 11, 0x333333);
   px(g, 8, 11, 0x333333);
-  px(g, 9, 10, 0x333333);
+  px(g, 9, 11, 0x333333);
+  px(g, 10, 10, 0x333333);
 
   g.generateTexture('pierre_roulante', 16, 16);
   g.destroy();
@@ -302,24 +369,26 @@ function generatePierreRoulante(scene: Phaser.Scene): void {
 // 5. toile_araignee  --  Spider web with spider in center
 function generateToileAraignee(scene: Phaser.Scene): void {
   const g = scene.make.graphics({ x: 0, y: 0 });
-  const web = 0xcccccc;
-  const spider = 0x444444;
+  const web = 0xddddee;
+  const webDim = 0xbbbbcc;
+  const spider = 0x333333;
+  const spiderHi = 0x555555;
 
   // Concentric web rings (drawn as pixels for retro feel)
   // Outer ring (edges of 16x16)
   // Top/bottom horizontal lines
-  for (let x = 2; x <= 13; x++) { px(g, x, 0, web); px(g, x, 15, web); }
+  for (let x = 2; x <= 13; x++) { px(g, x, 0, webDim); px(g, x, 15, webDim); }
   // Left/right vertical lines
-  for (let y = 2; y <= 13; y++) { px(g, 0, y, web); px(g, 15, y, web); }
+  for (let y = 2; y <= 13; y++) { px(g, 0, y, webDim); px(g, 15, y, webDim); }
   // Corners
-  px(g, 1, 1, web); px(g, 14, 1, web); px(g, 1, 14, web); px(g, 14, 14, web);
+  px(g, 1, 1, webDim); px(g, 14, 1, webDim); px(g, 1, 14, webDim); px(g, 14, 14, webDim);
 
-  // Middle ring
+  // Middle ring (brighter)
   for (let x = 5; x <= 10; x++) { px(g, x, 3, web); px(g, x, 12, web); }
   for (let y = 5; y <= 10; y++) { px(g, 3, y, web); px(g, 12, y, web); }
   px(g, 4, 4, web); px(g, 11, 4, web); px(g, 4, 11, web); px(g, 11, 11, web);
 
-  // Inner ring
+  // Inner ring (brightest)
   for (let x = 6; x <= 9; x++) { px(g, x, 5, web); px(g, x, 10, web); }
   for (let y = 6; y <= 9; y++) { px(g, 5, y, web); px(g, 10, y, web); }
 
@@ -334,23 +403,29 @@ function generateToileAraignee(scene: Phaser.Scene): void {
     px(g, 15 - i, i, web);
   }
 
-  // Spider body in center (3x3 block)
-  rect(g, 7, 7, 2, 2, spider);
-  // Spider head
-  px(g, 7, 6, spider);
-  px(g, 8, 6, spider);
-  // Legs (4 on each side)
-  px(g, 5, 6, spider);
-  px(g, 6, 7, spider);
-  px(g, 5, 8, spider);
-  px(g, 6, 9, spider);
-  px(g, 10, 6, spider);
-  px(g, 9, 7, spider);
-  px(g, 10, 8, spider);
-  px(g, 9, 9, spider);
-  // Spider eyes
-  px(g, 7, 6, 0xcc0000);
-  px(g, 8, 6, 0xcc0000);
+  // Spider body in center (4x4 block)
+  rect(g, 6, 6, 4, 4, spider);
+  // Spider head (larger)
+  rect(g, 6, 5, 4, 1, spider);
+  px(g, 7, 4, spider); px(g, 8, 4, spider);
+  // Body highlight
+  px(g, 7, 7, spiderHi); px(g, 8, 7, spiderHi);
+
+  // Legs (longer, 4 on each side extending further)
+  // Left legs
+  px(g, 5, 5, spider); px(g, 4, 4, spider); px(g, 3, 3, spider);
+  px(g, 5, 6, spider); px(g, 4, 6, spider); px(g, 3, 5, spider);
+  px(g, 5, 8, spider); px(g, 4, 8, spider); px(g, 3, 9, spider);
+  px(g, 5, 9, spider); px(g, 4, 10, spider); px(g, 3, 11, spider);
+  // Right legs
+  px(g, 10, 5, spider); px(g, 11, 4, spider); px(g, 12, 3, spider);
+  px(g, 10, 6, spider); px(g, 11, 6, spider); px(g, 12, 5, spider);
+  px(g, 10, 8, spider); px(g, 11, 8, spider); px(g, 12, 9, spider);
+  px(g, 10, 9, spider); px(g, 11, 10, spider); px(g, 12, 11, spider);
+
+  // Spider eyes (brighter red)
+  px(g, 7, 5, 0xee0000); px(g, 8, 5, 0xee0000);
+  px(g, 7, 4, 0xcc0000); px(g, 8, 4, 0xcc0000);
 
   g.generateTexture('toile_araignee', 16, 16);
   g.destroy();
@@ -359,52 +434,63 @@ function generateToileAraignee(scene: Phaser.Scene): void {
 // 6. nuage_noir  --  Storm cloud with angry eyes and lightning
 function generateNuageNoir(scene: Phaser.Scene): void {
   const g = scene.make.graphics({ x: 0, y: 0 });
+  const mid = 0x505566;
   const dark = 0x444455;
   const darker = 0x333344;
+  const darkest = 0x222233;
+  const hi = 0x666677;
   const lightning = 0xffdd44;
+  const lightningBright = 0xffffaa;
 
-  // Cloud puffs (top half)
-  // Upper puffs
-  rect(g, 3, 1, 4, 3, dark);
-  rect(g, 8, 0, 5, 3, dark);
-  // Main cloud body
-  rect(g, 1, 3, 14, 4, dark);
-  rect(g, 2, 2, 12, 2, dark);
-  // Bottom contour
-  rect(g, 2, 7, 12, 2, darker);
+  // Cloud puffs with better shading gradients
+  // Left puff (rounded top)
+  rect(g, 4, 2, 3, 1, hi);
+  rect(g, 3, 3, 4, 1, mid);
+  // Right puff (taller)
+  rect(g, 9, 0, 3, 1, hi);
+  rect(g, 8, 1, 5, 1, hi);
+  rect(g, 8, 2, 5, 1, mid);
+  // Center connection
+  rect(g, 2, 2, 2, 2, mid);
 
-  // Darker underside shading
-  rect(g, 3, 6, 10, 2, darker);
+  // Main cloud body with gradient shading (light top to dark bottom)
+  rect(g, 1, 3, 14, 1, mid);
+  rect(g, 1, 4, 14, 1, dark);
+  rect(g, 1, 5, 14, 1, dark);
+  rect(g, 1, 6, 14, 1, darker);
+  rect(g, 2, 7, 12, 1, darker);
+  rect(g, 3, 8, 10, 1, darkest);
 
-  // Highlight on top puffs
-  px(g, 4, 1, 0x555566);
-  px(g, 5, 1, 0x555566);
-  px(g, 9, 0, 0x555566);
-  px(g, 10, 0, 0x555566);
+  // Top highlight pixels on puffs
+  px(g, 4, 2, 0x777788); px(g, 5, 2, 0x777788);
+  px(g, 9, 0, 0x777788); px(g, 10, 0, 0x777788); px(g, 11, 0, 0x777788);
 
-  // Angry eyes
-  // White of eyes
-  rect(g, 4, 4, 2, 2, 0xdddddd);
-  rect(g, 10, 4, 2, 2, 0xdddddd);
-  // Red pupils
-  px(g, 5, 5, 0xcc2222);
-  px(g, 10, 5, 0xcc2222);
-  // Angry brows
-  px(g, 3, 3, 0x222233);
-  px(g, 4, 3, 0x222233);
-  px(g, 12, 3, 0x222233);
-  px(g, 11, 3, 0x222233);
+  // Larger angry eyes (3x2 whites)
+  rect(g, 3, 4, 3, 2, 0xdddddd);
+  rect(g, 10, 4, 3, 2, 0xdddddd);
+  // Red pupils (2px each)
+  px(g, 4, 5, 0xcc2222); px(g, 5, 5, 0xcc2222);
+  px(g, 10, 5, 0xcc2222); px(g, 11, 5, 0xcc2222);
+  // Thicker angry brows
+  rect(g, 2, 3, 3, 1, 0x222233);
+  rect(g, 11, 3, 3, 1, 0x222233);
+  px(g, 4, 4, 0x222233);
+  px(g, 11, 4, 0x222233);
 
-  // Lightning bolt below cloud
-  px(g, 8, 9, lightning);
-  px(g, 7, 10, lightning);
-  px(g, 6, 11, lightning);
-  px(g, 7, 11, lightning);
-  px(g, 8, 11, lightning);
-  px(g, 7, 12, lightning);
-  px(g, 6, 13, lightning);
-  px(g, 5, 14, lightning);
-  px(g, 6, 14, lightning);
+  // Primary lightning bolt (thicker, brighter center)
+  px(g, 8, 9, lightningBright);
+  px(g, 7, 10, lightningBright); px(g, 8, 10, lightning);
+  px(g, 6, 11, lightningBright); px(g, 7, 11, lightning); px(g, 8, 11, lightning);
+  px(g, 7, 12, lightningBright);
+  px(g, 6, 13, lightningBright); px(g, 7, 13, lightning);
+  px(g, 5, 14, lightningBright); px(g, 6, 14, lightning);
+
+  // Secondary smaller lightning bolt
+  px(g, 3, 9, lightning);
+  px(g, 2, 10, lightning);
+  px(g, 3, 10, lightning);
+  px(g, 2, 11, lightning);
+  px(g, 1, 12, lightning);
 
   g.generateTexture('nuage_noir', 16, 16);
   g.destroy();
@@ -582,6 +668,128 @@ function generateTilesetWorld4(scene: Phaser.Scene): void {
   rect(g, 0, 15, 16, 1, 0x5a4a2a);
 
   g.generateTexture('tileset_world4', 16, 16);
+  g.destroy();
+}
+
+// ===========================================================================
+// WORLD-SPECIFIC PLATFORM TILES (16x16 each)
+// ===========================================================================
+function generatePlatformTiles(scene: Phaser.Scene): void {
+  generatePlatformWorld1(scene);
+  generatePlatformWorld2(scene);
+  generatePlatformWorld3(scene);
+  generatePlatformWorld4(scene);
+}
+
+// Platform World 1: Lily pad platform — green oval with highlight
+function generatePlatformWorld1(scene: Phaser.Scene): void {
+  const g = scene.make.graphics({ x: 0, y: 0 });
+  const padGreen = 0x4a8c4a;
+  const padLight = 0x5aac5a;
+  const padDark = 0x3a6c3a;
+
+  // Rounded lily pad shape
+  rect(g, 1, 2, 14, 12, padGreen);
+  rect(g, 2, 1, 12, 14, padGreen);
+  // Top surface highlight
+  rect(g, 2, 1, 12, 3, padLight);
+  rect(g, 3, 0, 10, 2, padLight);
+  // Shadow edge at bottom
+  rect(g, 2, 13, 12, 2, padDark);
+  rect(g, 3, 14, 10, 2, padDark);
+  // Leaf vein
+  for (let y = 3; y <= 12; y++) px(g, 8, y, padDark);
+  // Notch detail
+  px(g, 7, 1, 0x000000);
+
+  g.generateTexture('platform_world1', 16, 16);
+  g.destroy();
+}
+
+// Platform World 2: Wooden plank — warm brown tones
+function generatePlatformWorld2(scene: Phaser.Scene): void {
+  const g = scene.make.graphics({ x: 0, y: 0 });
+  const wood = 0xb08050;
+  const woodLight = 0xc8a070;
+  const woodDark = 0x8a6040;
+
+  rect(g, 0, 0, 16, 16, wood);
+  // Wood grain horizontal lines
+  rect(g, 0, 3, 16, 1, woodDark);
+  rect(g, 0, 7, 16, 1, woodDark);
+  rect(g, 0, 11, 16, 1, woodDark);
+  // Top highlight
+  rect(g, 0, 0, 16, 2, woodLight);
+  // Bottom shadow
+  rect(g, 0, 14, 16, 2, woodDark);
+  // Knot detail
+  px(g, 5, 5, woodDark);
+  px(g, 6, 5, woodDark);
+  px(g, 5, 6, woodDark);
+  px(g, 11, 9, woodDark);
+  px(g, 12, 9, woodDark);
+
+  g.generateTexture('platform_world2', 16, 16);
+  g.destroy();
+}
+
+// Platform World 3: Crystal/mirror slab — purple-blue with shimmer
+function generatePlatformWorld3(scene: Phaser.Scene): void {
+  const g = scene.make.graphics({ x: 0, y: 0 });
+  const crystal = 0x5c4a72;
+  const crystalLight = 0x8a7a9a;
+  const crystalDark = 0x3a2a52;
+
+  rect(g, 0, 0, 16, 16, crystal);
+  // Top bevel
+  rect(g, 0, 0, 16, 3, crystalLight);
+  // Bottom shadow
+  rect(g, 0, 13, 16, 3, crystalDark);
+  // Shimmer streak
+  px(g, 3, 2, 0xc0c0c0);
+  px(g, 4, 3, 0xc0c0c0);
+  px(g, 5, 4, PALETTE.silver);
+  px(g, 6, 5, PALETTE.silver);
+  px(g, 7, 6, 0xc0c0c0);
+  // Reflection dots
+  px(g, 10, 4, 0xaa9abb);
+  px(g, 12, 8, 0xaa9abb);
+
+  g.generateTexture('platform_world3', 16, 16);
+  g.destroy();
+}
+
+// Platform World 4: Flower garden brick — vivid with flower accent
+function generatePlatformWorld4(scene: Phaser.Scene): void {
+  const g = scene.make.graphics({ x: 0, y: 0 });
+  const brick = 0x6a8a5a;
+  const brickLight = 0x8aaa7a;
+  const brickDark = 0x4a6a3a;
+
+  rect(g, 0, 0, 16, 16, brick);
+  // Top grassy highlight
+  rect(g, 0, 0, 16, 3, brickLight);
+  // Grass blade tips
+  px(g, 2, 0, 0x5abf5a);
+  px(g, 6, 0, 0x5abf5a);
+  px(g, 10, 0, 0x5abf5a);
+  px(g, 14, 0, 0x5abf5a);
+  // Bottom soil
+  rect(g, 0, 13, 16, 3, brickDark);
+  // Small flower
+  px(g, 4, 5, PALETTE.richRose);
+  px(g, 3, 6, PALETTE.richRose);
+  px(g, 5, 6, PALETTE.richRose);
+  px(g, 4, 7, PALETTE.richRose);
+  px(g, 4, 6, PALETTE.warmYellow);
+  // Another small flower
+  px(g, 11, 8, PALETTE.warmYellow);
+  px(g, 10, 9, PALETTE.warmYellow);
+  px(g, 12, 9, PALETTE.warmYellow);
+  px(g, 11, 10, PALETTE.warmYellow);
+  px(g, 11, 9, PALETTE.richRose);
+
+  g.generateTexture('platform_world4', 16, 16);
   g.destroy();
 }
 

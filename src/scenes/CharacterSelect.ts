@@ -22,6 +22,8 @@ export class CharacterSelect extends Phaser.Scene {
       fontSize: '8px',
       color: '#dec87a',
       fontFamily: 'monospace',
+      stroke: '#000000',
+      strokeThickness: 2,
     }).setOrigin(0.5);
 
     // Poppleton
@@ -33,21 +35,27 @@ export class CharacterSelect extends Phaser.Scene {
       .setInteractive();
 
     this.add.text(popX, charY + 35, 'Poppleton', {
-      fontSize: '7px',
+      fontSize: '8px',
       color: '#d4a057',
       fontFamily: 'monospace',
+      stroke: '#000000',
+      strokeThickness: 2,
     }).setOrigin(0.5);
 
     this.add.text(popX, charY + 48, 'Butterfly Float', {
-      fontSize: '5px',
+      fontSize: '6px',
       color: '#aaaaaa',
       fontFamily: 'monospace',
+      stroke: '#000000',
+      strokeThickness: 1,
     }).setOrigin(0.5);
 
     this.add.text(popX, charY + 57, 'Pounce Attack', {
-      fontSize: '5px',
+      fontSize: '6px',
       color: '#aaaaaa',
       fontFamily: 'monospace',
+      stroke: '#000000',
+      strokeThickness: 1,
     }).setOrigin(0.5);
 
     // Zacko
@@ -58,21 +66,27 @@ export class CharacterSelect extends Phaser.Scene {
       .setInteractive();
 
     this.add.text(zackoX, charY + 35, 'Zacko', {
-      fontSize: '7px',
+      fontSize: '8px',
       color: '#cccccc',
       fontFamily: 'monospace',
+      stroke: '#000000',
+      strokeThickness: 2,
     }).setOrigin(0.5);
 
     this.add.text(zackoX, charY + 48, 'Bat Dash', {
-      fontSize: '5px',
+      fontSize: '6px',
       color: '#aaaaaa',
       fontFamily: 'monospace',
+      stroke: '#000000',
+      strokeThickness: 1,
     }).setOrigin(0.5);
 
     this.add.text(zackoX, charY + 57, 'Bark Attack', {
-      fontSize: '5px',
+      fontSize: '6px',
       color: '#aaaaaa',
       fontFamily: 'monospace',
+      stroke: '#000000',
+      strokeThickness: 1,
     }).setOrigin(0.5);
 
     // Selector box
@@ -106,9 +120,11 @@ export class CharacterSelect extends Phaser.Scene {
 
     // Prompt
     this.add.text(GAME_WIDTH / 2, GAME_HEIGHT - 20, 'Press ENTER to start', {
-      fontSize: '6px',
-      color: '#888888',
+      fontSize: '7px',
+      color: '#aaaaaa',
       fontFamily: 'monospace',
+      stroke: '#000000',
+      strokeThickness: 2,
     }).setOrigin(0.5);
 
     // Resume AudioContext on first user interaction and start title music

@@ -17,10 +17,9 @@ export class HUD extends Phaser.Scene {
   }
 
   create(): void {
-    // Health icons (Frenchie faces)
+    // Health icons (Frenchie face icons)
     for (let i = 0; i < PLAYER_MAX_HP; i++) {
-      const icon = this.add.sprite(8 + i * 12, 8, 'poppleton');
-      icon.setScale(0.6);
+      const icon = this.add.sprite(8 + i * 12, 8, 'hp_icon_full');
       icon.setScrollFactor(0);
       this.healthIcons.push(icon);
     }
@@ -28,17 +27,21 @@ export class HUD extends Phaser.Scene {
     // Macaron counter
     this.add.sprite(8, 22, 'macaron').setScale(0.8).setScrollFactor(0);
     this.macaronText = this.add.text(16, 18, '0', {
-      fontSize: '7px',
+      fontSize: '8px',
       color: '#ffffff',
       fontFamily: 'monospace',
+      stroke: '#000000',
+      strokeThickness: 2,
     }).setScrollFactor(0);
 
     // Paint drop counter (top-right)
     this.add.sprite(GAME_WIDTH - 40, 8, 'paint_drop').setScale(0.8).setScrollFactor(0);
     this.paintDropText = this.add.text(GAME_WIDTH - 32, 4, '0', {
-      fontSize: '7px',
+      fontSize: '8px',
       color: '#ffffff',
       fontFamily: 'monospace',
+      stroke: '#000000',
+      strokeThickness: 2,
     }).setScrollFactor(0);
 
     // Wing timer bar (hidden until active)
@@ -54,18 +57,12 @@ export class HUD extends Phaser.Scene {
     // Update health icons
     for (let i = 0; i < this.healthIcons.length; i++) {
       if (i < player.hp) {
+        this.healthIcons[i].setTexture('hp_icon_full');
         this.healthIcons[i].setAlpha(1);
-        this.healthIcons[i].clearTint();
       } else {
-        this.healthIcons[i].setAlpha(0.3);
-        this.healthIcons[i].setTint(0x333333);
+        this.healthIcons[i].setTexture('hp_icon_empty');
+        this.healthIcons[i].setAlpha(1);
       }
-    }
-
-    // Update character icon texture
-    const texture = player.characterName === 'zacko' ? 'zacko' : 'poppleton';
-    for (const icon of this.healthIcons) {
-      icon.setTexture(texture);
     }
 
     // Macaron count
@@ -78,9 +75,11 @@ export class HUD extends Phaser.Scene {
     if (gm.candleCount > 0 && !this.candleText) {
       this.add.sprite(GAME_WIDTH - 40, 22, 'birthday_candle').setScale(0.6).setScrollFactor(0);
       this.candleText = this.add.text(GAME_WIDTH - 32, 18, '', {
-        fontSize: '7px',
+        fontSize: '8px',
         color: '#ffdd44',
         fontFamily: 'monospace',
+        stroke: '#000000',
+        strokeThickness: 2,
       }).setScrollFactor(0);
     }
     if (this.candleText) {

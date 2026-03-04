@@ -31,9 +31,11 @@ export class World2Level1 extends GameScene {
     super.create();
 
     this.add.text(4, 4, 'World 2-1: Sunrise Terrace', {
-      fontSize: '6px',
+      fontSize: '7px',
       color: '#6baaab',
       fontFamily: 'monospace',
+      stroke: '#000000',
+      strokeThickness: 2,
     }).setScrollFactor(0).setDepth(100);
 
     // === EASTER EGG: Clock Tower at 3:11 (Rachel's birthday March 11) ===
@@ -91,10 +93,12 @@ export class World2Level1 extends GameScene {
 
         // Birthday banner
         const banner = this.add.text(clockX, clockY - 30, 'Happy Birthday!\n   March 11', {
-          fontSize: '6px',
+          fontSize: '7px',
           fontFamily: 'monospace',
           color: '#ffdd44',
           align: 'center',
+          stroke: '#000000',
+          strokeThickness: 2,
         }).setOrigin(0.5).setDepth(50);
         this.tweens.add({
           targets: banner,

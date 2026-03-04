@@ -129,13 +129,17 @@ export class WorldMap extends Phaser.Scene {
       fontSize: '8px',
       fontFamily: 'monospace',
       color: '#dec87a',
+      stroke: '#000000',
+      strokeThickness: 2,
     }).setOrigin(0.5).setDepth(20);
 
     // Prompt
     this.promptText = this.add.text(GAME_WIDTH / 2, GAME_HEIGHT - 10, 'Select a world', {
-      fontSize: '5px',
+      fontSize: '6px',
       fontFamily: 'monospace',
-      color: '#888888',
+      color: '#aaaaaa',
+      stroke: '#000000',
+      strokeThickness: 1,
     }).setOrigin(0.5).setDepth(20);
 
     // Level selection container (hidden initially)
@@ -190,14 +194,18 @@ export class WorldMap extends Phaser.Scene {
         fontSize: '8px',
         fontFamily: 'monospace',
         color: isUnlocked ? '#ffffff' : '#666666',
+        stroke: '#000000',
+        strokeThickness: 2,
       }).setOrigin(0.5).setDepth(5);
       this.worldLabels.push(numText);
 
       // World label below
       const labelText = this.add.text(node.x, node.y + 18, node.label, {
-        fontSize: '4px',
+        fontSize: '5px',
         fontFamily: 'monospace',
-        color: isUnlocked ? '#cccccc' : '#555555',
+        color: isUnlocked ? '#cccccc' : '#777777',
+        stroke: '#000000',
+        strokeThickness: 1,
       }).setOrigin(0.5).setDepth(5);
       this.worldLabels.push(labelText);
 
@@ -207,6 +215,8 @@ export class WorldMap extends Phaser.Scene {
           fontSize: '8px',
           fontFamily: 'monospace',
           color: '#ffdd44',
+          stroke: '#000000',
+          strokeThickness: 2,
         }).setOrigin(0.5).setDepth(6);
         this.completionStars.push(star);
       }
@@ -306,9 +316,11 @@ export class WorldMap extends Phaser.Scene {
 
     // World title
     const worldTitle = this.add.text(GAME_WIDTH / 2, 24, `World ${world.worldNum}: ${world.label}`, {
-      fontSize: '7px',
+      fontSize: '8px',
       fontFamily: 'monospace',
       color: '#dec87a',
+      stroke: '#000000',
+      strokeThickness: 2,
     }).setOrigin(0.5);
     this.levelContainer.add(worldTitle);
 
@@ -347,9 +359,11 @@ export class WorldMap extends Phaser.Scene {
       // Level number and name
       const prefix = level.isBoss ? 'BOSS: ' : `${world.worldNum}-${level.levelNum}: `;
       const label = this.add.text(32, y, prefix + level.label, {
-        fontSize: '5px',
+        fontSize: '6px',
         fontFamily: 'monospace',
-        color: isUnlocked ? (isSelected ? '#ffffff' : '#aaaaaa') : '#555555',
+        color: isUnlocked ? (isSelected ? '#ffffff' : '#aaaaaa') : '#777777',
+        stroke: '#000000',
+        strokeThickness: 1,
       }).setDepth(16);
       this.levelContainer.add(label);
       this.levelLabels.push(label);
@@ -357,17 +371,21 @@ export class WorldMap extends Phaser.Scene {
       // Completion indicator
       if (isCompleted) {
         const checkMark = this.add.text(GAME_WIDTH - 36, y, '[OK]', {
-          fontSize: '5px',
+          fontSize: '6px',
           fontFamily: 'monospace',
           color: '#44ff44',
+          stroke: '#000000',
+          strokeThickness: 1,
         }).setDepth(16);
         this.levelContainer.add(checkMark);
         this.levelLabels.push(checkMark);
       } else if (!isUnlocked) {
         const lockIcon = this.add.text(GAME_WIDTH - 36, y, '[--]', {
-          fontSize: '5px',
+          fontSize: '6px',
           fontFamily: 'monospace',
-          color: '#555555',
+          color: '#777777',
+          stroke: '#000000',
+          strokeThickness: 1,
         }).setDepth(16);
         this.levelContainer.add(lockIcon);
         this.levelLabels.push(lockIcon);

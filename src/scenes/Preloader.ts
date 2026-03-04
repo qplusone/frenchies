@@ -45,46 +45,73 @@ export class Preloader extends Phaser.Scene {
   }
 
   private generatePlaceholders(): void {
-    // Poppleton placeholder (fawn/tan rectangle)
+    // Poppleton placeholder — fawn French Bulldog
     const pg = this.make.graphics({ x: 0, y: 0 });
-    pg.fillStyle(0xd4a057); // fawn
-    pg.fillRect(0, 0, 16, 16);
-    pg.fillStyle(0x4a3728); // dark muzzle
-    pg.fillRect(4, 10, 8, 4);
-    // ears
-    pg.fillStyle(0xd4a057);
-    pg.fillRect(2, 0, 4, 4);
-    pg.fillRect(10, 0, 4, 4);
+    this.drawFrenchiePlaceholder(pg, 0xd4a057, 0xb8883a, 0xe8c47a, 0x4a3728, false);
     pg.generateTexture('poppleton', 16, 16);
     pg.destroy();
 
-    // Zacko placeholder (black with white chest patch)
+    // Zacko placeholder — black & white French Bulldog
     const zg = this.make.graphics({ x: 0, y: 0 });
-    zg.fillStyle(0x2a2a2a); // black
-    zg.fillRect(0, 0, 16, 16);
-    zg.fillStyle(0xffffff); // white chest
-    zg.fillRect(5, 8, 6, 5);
-    // ears
-    zg.fillStyle(0x2a2a2a);
-    zg.fillRect(2, 0, 4, 4);
-    zg.fillRect(10, 0, 4, 4);
+    this.drawFrenchiePlaceholder(zg, 0x2a2a2a, 0x1a1a1a, 0x3a3a3a, 0xdddddd, true);
     zg.generateTexture('zacko', 16, 16);
     zg.destroy();
 
-    // Macaron placeholder
+    // Macaron placeholder — oval shape with top shell, filling, bottom shell
     const mg = this.make.graphics({ x: 0, y: 0 });
-    mg.fillStyle(0xe8b4b8);
-    mg.fillCircle(4, 4, 4);
+    const mPink = 0xe8b4b8;
+    const mCream = 0xfff0e0;
+    const mDark = 0xc89498;
+    // Top shell (rounded)
+    mg.fillStyle(mPink);
+    mg.fillRect(1, 0, 6, 1);
+    mg.fillRect(0, 1, 8, 2);
+    // Filling layer with "feet" texture
+    mg.fillStyle(mCream);
+    mg.fillRect(0, 3, 8, 2);
+    // Feet texture (bumpy edge on filling)
+    mg.fillStyle(mDark);
+    mg.fillRect(0, 3, 1, 1); mg.fillRect(2, 3, 1, 1); mg.fillRect(4, 3, 1, 1); mg.fillRect(6, 3, 1, 1);
+    mg.fillRect(1, 4, 1, 1); mg.fillRect(3, 4, 1, 1); mg.fillRect(5, 4, 1, 1); mg.fillRect(7, 4, 1, 1);
+    // Bottom shell
+    mg.fillStyle(mPink);
+    mg.fillRect(0, 5, 8, 2);
+    mg.fillRect(1, 7, 6, 1);
+    // Highlight on top shell
+    mg.fillStyle(0xf0ccd0);
+    mg.fillRect(2, 0, 3, 1);
+    mg.fillRect(1, 1, 3, 1);
     mg.generateTexture('macaron', 8, 8);
     mg.destroy();
 
-    // Choquette placeholder
+    // Choquette placeholder — round puff with sugar crystal dots
     const cg = this.make.graphics({ x: 0, y: 0 });
-    cg.fillStyle(0xf5deb3);
-    cg.fillCircle(4, 4, 3);
+    const cBase = 0xf5deb3;
+    const cShadow = 0xd4bc91;
+    const cHi = 0xfff5e0;
+    // Round puff shape
+    cg.fillStyle(cBase);
+    cg.fillRect(2, 0, 4, 1);
+    cg.fillRect(1, 1, 6, 1);
+    cg.fillRect(0, 2, 8, 4);
+    cg.fillRect(1, 6, 6, 1);
+    cg.fillRect(2, 7, 4, 1);
+    // Highlight on upper-left
+    cg.fillStyle(cHi);
+    cg.fillRect(2, 1, 2, 1);
+    cg.fillRect(1, 2, 2, 1);
+    // Shadow on lower-right
+    cg.fillStyle(cShadow);
+    cg.fillRect(5, 5, 2, 1);
+    cg.fillRect(4, 6, 2, 1);
+    // Sugar crystal dots (scattered white pixels)
     cg.fillStyle(0xffffff);
     cg.fillRect(2, 1, 1, 1);
     cg.fillRect(5, 2, 1, 1);
+    cg.fillRect(1, 3, 1, 1);
+    cg.fillRect(4, 3, 1, 1);
+    cg.fillRect(6, 4, 1, 1);
+    cg.fillRect(3, 5, 1, 1);
     cg.generateTexture('choquette', 8, 8);
     cg.destroy();
 
@@ -113,23 +140,81 @@ export class Preloader extends Phaser.Scene {
     bg.generateTexture('bark_projectile', 6, 6);
     bg.destroy();
 
-    // Soufflé placeholder
+    // Souffle placeholder — puffy rising top with ramekin base
     const sg = this.make.graphics({ x: 0, y: 0 });
-    sg.fillStyle(PALETTE.softGold);
-    sg.fillRect(1, 4, 10, 6);
-    sg.fillStyle(0xffeebb);
-    sg.fillRect(2, 1, 8, 5);
+    const sGold = 0xdec87a;
+    const sRamekin = 0xc49047;
+    const sRamekinDark = 0xa07030;
+    const sHi = 0xf0e0a0;
+    // Puffy risen top (wider than ramekin)
+    sg.fillStyle(sGold);
+    sg.fillRect(3, 0, 6, 1);
+    sg.fillRect(1, 1, 10, 1);
+    sg.fillRect(0, 2, 12, 2);
+    sg.fillRect(1, 4, 10, 1);
+    // Highlight on top
+    sg.fillStyle(sHi);
+    sg.fillRect(3, 0, 3, 1);
+    sg.fillRect(2, 1, 3, 1);
+    sg.fillRect(1, 2, 2, 1);
+    // Ramekin body (slightly narrower)
+    sg.fillStyle(sRamekin);
+    sg.fillRect(2, 5, 8, 1);
+    sg.fillRect(2, 6, 8, 3);
+    sg.fillRect(3, 9, 6, 1);
+    // Ramekin ridges
+    sg.fillStyle(sRamekinDark);
+    sg.fillRect(2, 5, 8, 1);
+    sg.fillRect(2, 7, 1, 2);
+    sg.fillRect(4, 7, 1, 2);
+    sg.fillRect(6, 7, 1, 2);
+    sg.fillRect(8, 7, 1, 2);
+    // Ramekin bottom rim
+    sg.fillRect(3, 9, 6, 1);
+    // Tiny highlight on risen top
+    sg.fillStyle(0xffffff);
+    sg.fillRect(4, 1, 1, 1);
     sg.generateTexture('souffle', 12, 12);
     sg.destroy();
 
-    // Wing power-up placeholder
+    // Wing power-up placeholder — two wing silhouettes
     const wg = this.make.graphics({ x: 0, y: 0 });
-    wg.fillStyle(0xffffff);
-    wg.fillRect(0, 2, 5, 8);
-    wg.fillRect(7, 2, 5, 8);
-    wg.fillStyle(0xaaddff);
-    wg.fillRect(1, 3, 3, 6);
-    wg.fillRect(8, 3, 3, 6);
+    const wBlue = 0xaaddff;
+    const wEdge = 0xffffff;
+    // Left wing (curved shape)
+    wg.fillStyle(wEdge);
+    wg.fillRect(0, 2, 1, 1);
+    wg.fillRect(0, 3, 5, 1);
+    wg.fillRect(0, 4, 6, 1);
+    wg.fillRect(0, 5, 6, 1);
+    wg.fillRect(1, 6, 5, 1);
+    wg.fillRect(2, 7, 4, 1);
+    wg.fillRect(3, 8, 3, 1);
+    wg.fillRect(4, 9, 2, 1);
+    // Left wing fill
+    wg.fillStyle(wBlue);
+    wg.fillRect(1, 4, 4, 1);
+    wg.fillRect(1, 5, 4, 1);
+    wg.fillRect(2, 6, 3, 1);
+    wg.fillRect(3, 7, 2, 1);
+    wg.fillRect(4, 8, 1, 1);
+    // Right wing (mirror)
+    wg.fillStyle(wEdge);
+    wg.fillRect(11, 2, 1, 1);
+    wg.fillRect(7, 3, 5, 1);
+    wg.fillRect(6, 4, 6, 1);
+    wg.fillRect(6, 5, 6, 1);
+    wg.fillRect(6, 6, 5, 1);
+    wg.fillRect(6, 7, 4, 1);
+    wg.fillRect(6, 8, 3, 1);
+    wg.fillRect(6, 9, 2, 1);
+    // Right wing fill
+    wg.fillStyle(wBlue);
+    wg.fillRect(7, 4, 4, 1);
+    wg.fillRect(7, 5, 4, 1);
+    wg.fillRect(7, 6, 3, 1);
+    wg.fillRect(7, 7, 2, 1);
+    wg.fillRect(7, 8, 1, 1);
     wg.generateTexture('wing_powerup', 12, 12);
     wg.destroy();
 
@@ -277,5 +362,90 @@ export class Preloader extends Phaser.Scene {
     fogProj.fillCircle(3, 3, 3);
     fogProj.generateTexture('fog_projectile', 6, 6);
     fogProj.destroy();
+  }
+
+  /**
+   * Draw a French Bulldog placeholder sprite (16x16) on the given Graphics.
+   * Matches the style used by AnimationGenerator's drawFrenchieBase.
+   */
+  private drawFrenchiePlaceholder(
+    g: Phaser.GameObjects.Graphics,
+    bodyColor: number,
+    darkColor: number,
+    lightColor: number,
+    muzzleColor: number,
+    hasWhiteChest: boolean,
+  ): void {
+    const fill = (c: number, x: number, y: number, w = 1, h = 1) => {
+      g.fillStyle(c);
+      g.fillRect(x, y, w, h);
+    };
+
+    // --- Body (rounder torso with tapered edges) ---
+    fill(bodyColor, 5, 6, 6, 1);    // top of body (narrow)
+    fill(bodyColor, 4, 7, 8, 1);    // slightly wider
+    fill(bodyColor, 3, 8, 10, 2);   // widest rows y=8..9
+    fill(bodyColor, 4, 10, 8, 1);   // taper back
+    fill(bodyColor, 5, 11, 6, 1);   // bottom of torso (narrow)
+    fill(lightColor, 5, 6, 6, 1);   // top highlight
+    fill(darkColor, 5, 11, 6, 1);   // bottom shadow
+
+    // --- Head ---
+    fill(bodyColor, 4, 3, 8, 4);    // main head block y=3..6
+    fill(bodyColor, 5, 2, 6, 1);    // top of head y=2
+    fill(lightColor, 5, 2, 6, 1);   // highlight
+
+    // --- Bat ears (triangular) ---
+    // Left ear
+    fill(bodyColor, 3, 2, 3, 1);    // base y=2
+    fill(bodyColor, 3, 1, 2, 1);    // mid y=1
+    fill(bodyColor, 3, 0, 1, 1);    // tip y=0
+    fill(darkColor, 3, 0, 1, 1);    // dark tip
+    fill(lightColor, 4, 1, 1, 1);   // inner ear
+    fill(lightColor, 4, 2, 1, 1);
+    // Right ear
+    fill(bodyColor, 10, 2, 3, 1);
+    fill(bodyColor, 11, 1, 2, 1);
+    fill(bodyColor, 12, 0, 1, 1);
+    fill(darkColor, 12, 0, 1, 1);
+    fill(lightColor, 11, 1, 1, 1);
+    fill(lightColor, 11, 2, 1, 1);
+
+    // --- Flat muzzle ---
+    fill(muzzleColor, 5, 7, 6, 3);
+    fill(muzzleColor, 6, 6, 4, 1);
+
+    // --- Eyes (with highlights) ---
+    fill(0x1a1a1a, 5, 4, 2, 2);     // left eye
+    fill(0x1a1a1a, 9, 4, 2, 2);     // right eye
+    fill(0xffffff, 5, 4, 1, 1);     // left eye shine
+    fill(0xcccccc, 6, 5, 1, 1);
+    fill(0xffffff, 9, 4, 1, 1);     // right eye shine
+    fill(0xcccccc, 10, 5, 1, 1);
+
+    // --- Nose (3px wide) ---
+    fill(0x2a1a0e, 6, 6, 3, 1);
+
+    // --- Jowl marks ---
+    fill(0x3a2818, 5, 9, 1, 1);
+    fill(0x3a2818, 10, 9, 1, 1);
+
+    // --- Stubby tail ---
+    fill(bodyColor, 12, 9, 2, 1);
+    fill(bodyColor, 13, 8, 1, 1);
+
+    // --- White chest for Zacko ---
+    if (hasWhiteChest) {
+      fill(0xffffff, 6, 7, 4, 1);
+      fill(0xffffff, 5, 8, 6, 3);
+    }
+
+    // --- Legs ---
+    fill(darkColor, 4, 12, 2, 3);   // left leg
+    fill(darkColor, 10, 12, 2, 3);  // right leg
+
+    // --- Feet (slightly wider) ---
+    fill(darkColor, 3, 14, 3, 2);   // left foot
+    fill(darkColor, 10, 14, 3, 2);  // right foot
   }
 }

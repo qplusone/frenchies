@@ -76,14 +76,18 @@ export class Gallery extends Phaser.Scene {
       fontSize: '8px',
       fontFamily: 'monospace',
       color: '#dec87a',
+      stroke: '#000000',
+      strokeThickness: 2,
     }).setOrigin(0.5);
 
     // Paint drop count
     const gm = GameManager.instance;
     this.paintDropText = this.add.text(GAME_WIDTH / 2, 30, this.getPaintDropLabel(), {
-      fontSize: '6px',
+      fontSize: '7px',
       fontFamily: 'monospace',
       color: '#d4a057',
+      stroke: '#000000',
+      strokeThickness: 2,
     }).setOrigin(0.5);
 
     // Draw painting grid
@@ -91,9 +95,11 @@ export class Gallery extends Phaser.Scene {
 
     // Status message area (for feedback text) — must be created before updateCursor()
     this.statusText = this.add.text(GAME_WIDTH / 2, GAME_HEIGHT - 22, '', {
-      fontSize: '5px',
+      fontSize: '6px',
       fontFamily: 'monospace',
       color: '#e8b4b8',
+      stroke: '#000000',
+      strokeThickness: 1,
     }).setOrigin(0.5).setDepth(10);
 
     // Cursor highlight
@@ -103,9 +109,11 @@ export class Gallery extends Phaser.Scene {
 
     // Back button prompt
     this.add.text(GAME_WIDTH / 2, GAME_HEIGHT - 10, 'ESC: Back', {
-      fontSize: '5px',
+      fontSize: '6px',
       fontFamily: 'monospace',
       color: '#666666',
+      stroke: '#000000',
+      strokeThickness: 1,
     }).setOrigin(0.5);
 
     // Input
@@ -183,7 +191,9 @@ export class Gallery extends Phaser.Scene {
           this.add.text(cx, cy, '?', {
             fontSize: '8px',
             fontFamily: 'monospace',
-            color: '#555555',
+            color: '#777777',
+            stroke: '#000000',
+            strokeThickness: 2,
           }).setOrigin(0.5);
         }
 
