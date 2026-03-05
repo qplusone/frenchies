@@ -20,35 +20,35 @@ export class HUD extends Phaser.Scene {
     // Health icons (Frenchie face icons)
     for (let i = 0; i < PLAYER_MAX_HP; i++) {
       const icon = this.add.sprite(8 + i * 12, 8, 'hp_icon_full');
-      icon.setScrollFactor(0);
+      icon.setScrollFactor(0).setDepth(1000);
       this.healthIcons.push(icon);
     }
 
     // Macaron counter
-    this.add.sprite(8, 22, 'macaron').setScale(0.8).setScrollFactor(0);
+    this.add.sprite(8, 22, 'macaron').setScale(0.8).setScrollFactor(0).setDepth(1000);
     this.macaronText = this.add.text(16, 18, '0', {
       fontSize: '8px',
       color: '#ffffff',
       fontFamily: 'monospace',
       stroke: '#000000',
       strokeThickness: 2,
-    }).setScrollFactor(0);
+    }).setScrollFactor(0).setDepth(1000);
 
     // Paint drop counter (top-right)
-    this.add.sprite(GAME_WIDTH - 40, 8, 'paint_drop').setScale(0.8).setScrollFactor(0);
+    this.add.sprite(GAME_WIDTH - 40, 8, 'paint_drop').setScale(0.8).setScrollFactor(0).setDepth(1000);
     this.paintDropText = this.add.text(GAME_WIDTH - 32, 4, '0', {
       fontSize: '8px',
       color: '#ffffff',
       fontFamily: 'monospace',
       stroke: '#000000',
       strokeThickness: 2,
-    }).setScrollFactor(0);
+    }).setScrollFactor(0).setDepth(1000);
 
     // Wing timer bar (hidden until active)
     this.wingTimerBg = this.add.graphics();
     this.wingTimerFill = this.add.graphics();
-    this.wingTimerBg.setVisible(false);
-    this.wingTimerFill.setVisible(false);
+    this.wingTimerBg.setScrollFactor(0).setDepth(1000).setVisible(false);
+    this.wingTimerFill.setScrollFactor(0).setDepth(1000).setVisible(false);
   }
 
   updateHUD(player: Player): void {
@@ -73,14 +73,14 @@ export class HUD extends Phaser.Scene {
 
     // Birthday candle counter (only show after first candle found)
     if (gm.candleCount > 0 && !this.candleText) {
-      this.add.sprite(GAME_WIDTH - 40, 22, 'birthday_candle').setScale(0.6).setScrollFactor(0);
+      this.add.sprite(GAME_WIDTH - 40, 22, 'birthday_candle').setScale(0.6).setScrollFactor(0).setDepth(1000);
       this.candleText = this.add.text(GAME_WIDTH - 32, 18, '', {
         fontSize: '8px',
         color: '#ffdd44',
         fontFamily: 'monospace',
         stroke: '#000000',
         strokeThickness: 2,
-      }).setScrollFactor(0);
+      }).setScrollFactor(0).setDepth(1000);
     }
     if (this.candleText) {
       this.candleText.setText(`${gm.candleCount}/11`);

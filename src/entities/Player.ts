@@ -25,6 +25,9 @@ export abstract class Player extends Phaser.Physics.Arcade.Sprite {
   flyTimer: number = 0;
   facingRight: boolean = true;
 
+  protected wingOverlay: Phaser.GameObjects.Sprite | null = null;
+  private wingFlapTween: Phaser.Tweens.Tween | null = null;
+
   protected cursors!: Phaser.Types.Input.Keyboard.CursorKeys;
   protected keys!: Record<string, Phaser.Input.Keyboard.Key>;
   protected invincibilityTimer: Phaser.Time.TimerEvent | null = null;
@@ -40,7 +43,6 @@ export abstract class Player extends Phaser.Physics.Arcade.Sprite {
     const body = this.body as Phaser.Physics.Arcade.Body;
     body.setSize(12, 14);
     body.setOffset(2, 2);
-    body.setCollideWorldBounds(true);
     body.setMaxVelocityY(400);
 
     // Mark as player for boss AI to find
@@ -178,6 +180,12 @@ export abstract class Player extends Phaser.Physics.Arcade.Sprite {
 
     body.setVelocity(vx, vy);
 
+    // Update wing overlay position to follow player
+    if (this.wingOverlay) {
+      this.wingOverlay.setPosition(this.x, this.y - 2);
+      this.wingOverlay.setFlipX(this.flipX);
+    }
+
     this.flyTimer -= delta;
     if (this.flyTimer <= 0) {
       this.stopFlying();
@@ -190,6 +198,23 @@ export abstract class Player extends Phaser.Physics.Arcade.Sprite {
     this.state = 'flying';
     const body = this.body as Phaser.Physics.Arcade.Body;
     body.setAllowGravity(false);
+
+    // Create wing overlay sprite (butterfly for Poppleton, bat for Zacko)
+    const wingTexture = this.characterName === 'zacko' ? 'wing_overlay_bat' : 'wing_overlay_butterfly';
+    if (this.scene.textures.exists(wingTexture)) {
+      this.wingOverlay = this.scene.add.sprite(this.x, this.y - 2, wingTexture);
+      this.wingOverlay.setDepth(this.depth - 1); // render behind the player body
+
+      // Flapping animation — oscillate scaleY for wing beat effect
+      this.wingFlapTween = this.scene.tweens.add({
+        targets: this.wingOverlay,
+        scaleY: { from: 1, to: 0.5 },
+        duration: 150,
+        yoyo: true,
+        repeat: -1,
+        ease: 'Sine.easeInOut',
+      });
+    }
   }
 
   stopFlying(): void {
@@ -199,6 +224,16 @@ export abstract class Player extends Phaser.Physics.Arcade.Sprite {
     const body = this.body as Phaser.Physics.Arcade.Body;
     body.setAllowGravity(true);
     body.setGravityY(0);
+
+    // Remove wing overlay
+    if (this.wingFlapTween) {
+      this.wingFlapTween.stop();
+      this.wingFlapTween = null;
+    }
+    if (this.wingOverlay) {
+      this.wingOverlay.destroy();
+      this.wingOverlay = null;
+    }
   }
 
   takeDamage(amount: number = 1): void {
@@ -244,6 +279,10 @@ export abstract class Player extends Phaser.Physics.Arcade.Sprite {
   }
 
   private die(): void {
+    // Clean up wings if flying when killed
+    if (this.isFlying) {
+      this.stopFlying();
+    }
     // Emit event for GameScene to handle respawn
     this.scene.events.emit('player-died');
   }

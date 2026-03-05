@@ -135,8 +135,9 @@ export class BossScene extends Phaser.Scene {
     // Build UI
     this.createBossHealthBar();
 
-    // Launch HUD
+    // Launch HUD and ensure it renders above the game scene
     this.scene.launch('HUD');
+    this.scene.bringToTop('HUD');
 
     // Pause input
     const escKey = this.input.keyboard!.addKey(Phaser.Input.Keyboard.KeyCodes.ESC);

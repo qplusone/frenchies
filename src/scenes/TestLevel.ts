@@ -9,6 +9,7 @@ import { HUD } from '../ui/HUD';
 export class TestLevel extends Phaser.Scene {
   private player!: Player;
   private groundGroup!: Phaser.Physics.Arcade.StaticGroup;
+  private fallingInPit: boolean = false;
 
   constructor() {
     super('TestLevel');
@@ -69,8 +70,8 @@ export class TestLevel extends Phaser.Scene {
     // Camera
     this.cameras.main.setBounds(0, 0, GAME_WIDTH * 2, GAME_HEIGHT);
     this.cameras.main.startFollow(this.player, true, 0.1, 0.1);
-    this.physics.world.setBounds(0, 0, GAME_WIDTH * 2, GAME_HEIGHT);
-    (this.player.body as Phaser.Physics.Arcade.Body).setCollideWorldBounds(true);
+    // Extend world bounds below the map for pit fall detection
+    this.physics.world.setBounds(0, 0, GAME_WIDTH * 2, GAME_HEIGHT + 200);
 
     // Enemies
     const blob = this.physics.add.sprite(200, GAME_HEIGHT - TILE_SIZE * 2, 'brouillard_blob');
@@ -111,8 +112,9 @@ export class TestLevel extends Phaser.Scene {
       this.player.hp = this.player.maxHp;
     });
 
-    // Launch HUD
+    // Launch HUD and ensure it renders above the game scene
     this.scene.launch('HUD');
+    this.scene.bringToTop('HUD');
     GameManager.instance.resetLevelCollectibles();
 
     // Instructions
@@ -132,7 +134,20 @@ export class TestLevel extends Phaser.Scene {
   }
 
   update(time: number, delta: number): void {
+    if (!this.player.active) return;
+
     this.player.update(time, delta);
+
+    // Pit / fall detection
+    if (this.player.y > GAME_HEIGHT + 32 && !this.fallingInPit) {
+      this.fallingInPit = true;
+      this.player.takeDamage(1);
+      if (this.player.hp > 0) {
+        this.player.setPosition(40, GAME_HEIGHT - 48);
+        (this.player.body as Phaser.Physics.Arcade.Body).setVelocity(0, 0);
+        this.fallingInPit = false;
+      }
+    }
 
     // Update HUD
     const hudScene = this.scene.get('HUD') as HUD;

@@ -162,6 +162,11 @@ export class WorldMap extends Phaser.Scene {
 
     // Input
     this.setupInput();
+
+    // Clean up keyboard listeners on scene shutdown to prevent stacking on re-entry
+    this.events.once('shutdown', () => {
+      this.input.keyboard!.removeAllKeys(true);
+    });
   }
 
   private drawWorldNodes(): void {

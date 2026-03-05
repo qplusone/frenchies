@@ -62,6 +62,7 @@ export function generateAllSprites(scene: Phaser.Scene): void {
   generateBackgroundSprites(scene);
   generateUISprites(scene);
   generateMiscSprites(scene);
+  generateWingOverlays(scene);
 }
 
 // ===========================================================================
@@ -1550,5 +1551,107 @@ function drawFogWisp(
         g.fillRect(cx, y + row * 2, segW, 2);
       }
     }
+  }
+}
+
+// ===========================================================================
+// Wing overlay sprites for flight powerup
+// ===========================================================================
+
+function generateWingOverlays(scene: Phaser.Scene): void {
+  // --- Butterfly wings for Poppleton (14x10) ---
+  if (!scene.textures.exists('wing_overlay_butterfly')) {
+    const g = scene.make.graphics({ x: 0, y: 0 });
+
+    // Left upper wing lobe
+    g.fillStyle(0xaaddff);
+    g.fillRect(1, 2, 4, 3);   // main lobe
+    g.fillRect(0, 3, 1, 2);   // outer edge
+    // Left lower wing lobe
+    g.fillRect(1, 6, 3, 2);
+    g.fillRect(0, 7, 1, 1);
+    // Left wing inner highlights
+    g.fillStyle(0xccaaff);
+    g.fillRect(2, 3, 2, 1);   // purple shimmer
+    g.fillRect(2, 7, 1, 1);
+    // Left wing edge detail
+    g.fillStyle(0x8899cc);
+    g.fillRect(0, 2, 1, 1);   // top corner
+    g.fillRect(1, 1, 2, 1);   // top edge
+    // Left wing spots
+    g.fillStyle(0xffffff, 0.6);
+    g.fillRect(3, 3, 1, 1);
+    g.fillRect(2, 6, 1, 1);
+
+    // Right upper wing lobe (mirror)
+    g.fillStyle(0xaaddff);
+    g.fillRect(9, 2, 4, 3);
+    g.fillRect(13, 3, 1, 2);
+    // Right lower wing lobe
+    g.fillRect(10, 6, 3, 2);
+    g.fillRect(13, 7, 1, 1);
+    // Right wing inner highlights
+    g.fillStyle(0xccaaff);
+    g.fillRect(10, 3, 2, 1);
+    g.fillRect(11, 7, 1, 1);
+    // Right wing edge detail
+    g.fillStyle(0x8899cc);
+    g.fillRect(13, 2, 1, 1);
+    g.fillRect(11, 1, 2, 1);
+    // Right wing spots
+    g.fillStyle(0xffffff, 0.6);
+    g.fillRect(10, 3, 1, 1);
+    g.fillRect(11, 6, 1, 1);
+
+    // Center body connector (tiny)
+    g.fillStyle(0x887744);
+    g.fillRect(6, 3, 2, 4);
+
+    g.generateTexture('wing_overlay_butterfly', 14, 10);
+    g.destroy();
+  }
+
+  // --- Bat wings for Zacko (16x8) ---
+  if (!scene.textures.exists('wing_overlay_bat')) {
+    const g = scene.make.graphics({ x: 0, y: 0 });
+
+    // Left bat wing membrane
+    g.fillStyle(0x3a3a4a);
+    g.fillRect(1, 1, 5, 4);   // main membrane
+    g.fillRect(0, 2, 1, 2);   // outer edge
+    g.fillRect(2, 0, 2, 1);   // top edge
+    g.fillRect(1, 5, 4, 1);   // bottom edge
+    // Left wing finger struts (darker lines)
+    g.fillStyle(0x2a2a3a);
+    g.fillRect(1, 0, 1, 6);   // outer strut
+    g.fillRect(3, 0, 1, 5);   // middle strut
+    g.fillRect(5, 1, 1, 4);   // inner strut
+    // Left wing membrane highlights
+    g.fillStyle(0x4a4a5a);
+    g.fillRect(2, 2, 1, 2);   // between struts
+    g.fillRect(4, 2, 1, 2);
+
+    // Right bat wing membrane (mirror)
+    g.fillStyle(0x3a3a4a);
+    g.fillRect(10, 1, 5, 4);
+    g.fillRect(15, 2, 1, 2);
+    g.fillRect(12, 0, 2, 1);
+    g.fillRect(11, 5, 4, 1);
+    // Right wing finger struts
+    g.fillStyle(0x2a2a3a);
+    g.fillRect(14, 0, 1, 6);
+    g.fillRect(12, 0, 1, 5);
+    g.fillRect(10, 1, 1, 4);
+    // Right wing membrane highlights
+    g.fillStyle(0x4a4a5a);
+    g.fillRect(13, 2, 1, 2);
+    g.fillRect(11, 2, 1, 2);
+
+    // Center body connector
+    g.fillStyle(0x2a2a2a);
+    g.fillRect(7, 2, 2, 3);
+
+    g.generateTexture('wing_overlay_bat', 16, 8);
+    g.destroy();
   }
 }

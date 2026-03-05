@@ -67,6 +67,7 @@ export class GameScene extends Phaser.Scene {
   protected spawnPoint: { x: number; y: number } = { x: 40, y: GAME_HEIGHT - 48 };
   protected mapWidthPx: number = GAME_WIDTH;
   protected mapHeightPx: number = GAME_HEIGHT;
+  private fallingInPit: boolean = false;
 
   protected sceneConfig!: GameSceneConfig;
 
@@ -121,8 +122,8 @@ export class GameScene extends Phaser.Scene {
     // Camera
     this.cameras.main.setBounds(0, 0, this.mapWidthPx, this.mapHeightPx);
     this.cameras.main.startFollow(this.player, true, 0.1, 0.1);
-    this.physics.world.setBounds(0, 0, this.mapWidthPx, this.mapHeightPx);
-    (this.player.body as Phaser.Physics.Arcade.Body).setCollideWorldBounds(true);
+    // Extend world bounds below the map so the player can fall through gaps
+    this.physics.world.setBounds(0, 0, this.mapWidthPx, this.mapHeightPx + 200);
 
     // Spawn game objects
     this.spawnCollectibles();
@@ -141,8 +142,9 @@ export class GameScene extends Phaser.Scene {
     // Reset level collectible count
     GameManager.instance.resetLevelCollectibles();
 
-    // Launch HUD overlay
+    // Launch HUD overlay and ensure it renders above the game scene
     this.scene.launch('HUD');
+    this.scene.bringToTop('HUD');
 
     // Fade-in transition when entering the level
     this.cameras.main.fadeIn(400, 0, 0, 0);
@@ -181,10 +183,22 @@ export class GameScene extends Phaser.Scene {
   }
 
   update(time: number, delta: number): void {
+    if (!this.player.active) return;
+
     this.player.update(time, delta);
     this.parallax.update();
     this.worldParticles.update();
     TouchControls.getInstance().resetJustPressed();
+
+    // Pit / fall detection — player fell below the visible map
+    if (this.player.y > this.mapHeightPx + 32 && !this.fallingInPit) {
+      this.fallingInPit = true;
+      this.player.takeDamage(1);
+      if (this.player.hp > 0) {
+        this.respawnAfterFall();
+      }
+      // If hp <= 0, the 'player-died' event handles full death respawn
+    }
 
     // Update HUD
     const hudScene = this.scene.get('HUD') as HUD;
@@ -620,5 +634,23 @@ export class GameScene extends Phaser.Scene {
     this.player.setPosition(spawn.x, spawn.y);
     this.player.hp = this.player.maxHp;
     (this.player.body as Phaser.Physics.Arcade.Body).setVelocity(0, 0);
+    this.fallingInPit = false;
+  }
+
+  /** Respawn after a pit fall — repositions but does NOT reset HP. */
+  protected respawnAfterFall(): void {
+    let spawn: { x: number; y: number };
+    if (this.currentCheckpoint) {
+      spawn = { x: this.currentCheckpoint.x, y: this.currentCheckpoint.y };
+    } else if (this.map) {
+      const spawnPoints = parseSpawnPoints(this.map);
+      spawn = spawnPoints[0] || this.spawnPoint;
+    } else {
+      spawn = this.spawnPoint;
+    }
+
+    this.player.setPosition(spawn.x, spawn.y);
+    (this.player.body as Phaser.Physics.Arcade.Body).setVelocity(0, 0);
+    this.fallingInPit = false;
   }
 }
