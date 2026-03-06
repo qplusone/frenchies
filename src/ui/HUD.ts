@@ -17,6 +17,11 @@ export class HUD extends Phaser.Scene {
   }
 
   create(): void {
+    // Reset state that persists across scene restarts (constructor doesn't re-run)
+    this.healthIcons = [];
+    this.candleText = null;
+    this.wingTimerVisible = false;
+
     // Health icons (Frenchie face icons)
     for (let i = 0; i < PLAYER_MAX_HP; i++) {
       const icon = this.add.sprite(8 + i * 12, 8, 'hp_icon_full');

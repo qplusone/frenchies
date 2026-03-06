@@ -37,6 +37,7 @@ export class WorldMap extends Phaser.Scene {
   private levelContainer!: Phaser.GameObjects.Container;
   private worldLabels: Phaser.GameObjects.Text[] = [];
   private levelLabels: Phaser.GameObjects.Text[] = [];
+  private levelBoxes: Phaser.GameObjects.Graphics[] = [];
   private completionStars: Phaser.GameObjects.Text[] = [];
 
   constructor() {
@@ -341,9 +342,11 @@ export class WorldMap extends Phaser.Scene {
     const gm = GameManager.instance;
     const world = this.worldNodes[this.selectedWorld];
 
-    // Clear old level labels
+    // Clear old level UI elements
     this.levelLabels.forEach(t => t.destroy());
     this.levelLabels = [];
+    this.levelBoxes.forEach(g => g.destroy());
+    this.levelBoxes = [];
 
     for (let i = 0; i < world.levels.length; i++) {
       const level = world.levels[i];
@@ -364,6 +367,7 @@ export class WorldMap extends Phaser.Scene {
         boxG.strokeRect(24, y - 8, GAME_WIDTH - 48, 28);
       }
       this.levelContainer.add(boxG);
+      this.levelBoxes.push(boxG);
 
       // Level number and name
       const prefix = level.isBoss ? 'BOSS: ' : `${world.worldNum}-${level.levelNum}: `;
