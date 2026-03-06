@@ -44,6 +44,10 @@ export class WorldMap extends Phaser.Scene {
   }
 
   create(): void {
+    // Reset state that persists across scene restarts (constructor doesn't re-run)
+    this.mode = 'world';
+    this.selectedLevel = 0;
+
     const gm = GameManager.instance;
     this.cameras.main.setBackgroundColor(PALETTE.uiBackground);
 
