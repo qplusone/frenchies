@@ -57,7 +57,7 @@ export class World2Level1 extends GameScene {
     // Clock hands showing 3:11
     clockTower.lineStyle(1, 0x222222);
     clockTower.lineBetween(clockX, clockY, clockX + 5, clockY);     // hour hand → 3
-    clockTower.lineBetween(clockX, clockY, clockX - 1, clockY - 7); // minute hand → 11
+    clockTower.lineBetween(clockX, clockY, clockX + 6, clockY - 3); // minute hand → :11
 
     // Easter egg trigger: when near the clock and pressing Up
     let easterEggTriggered = false;

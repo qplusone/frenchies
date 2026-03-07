@@ -59,7 +59,7 @@ export class World2Level2 extends GameScene {
     this.addGroundRow(11 * TILE_SIZE, GROUND_Y, 9);
 
     // Wall-like ground blocks on the sides to create the enclosed feel
-    this.addGroundBlock(11 * TILE_SIZE, GROUND_Y - 7 * TILE_SIZE, 2, 7); // left wall
+    this.addGroundBlock(11 * TILE_SIZE, GROUND_Y - 7 * TILE_SIZE, 2, 5); // left wall (gap at bottom for entry)
     this.addGroundBlock(18 * TILE_SIZE, GROUND_Y - 7 * TILE_SIZE, 2, 7); // right wall
 
     // Staggered platforms inside the shaft for climbing
