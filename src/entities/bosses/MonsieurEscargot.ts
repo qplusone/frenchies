@@ -102,27 +102,25 @@ export class MonsieurEscargot extends Boss {
 
   private updateRolling(_delta: number, body: Phaser.Physics.Arcade.Body): void {
     // Check for wall collision — bounce off world bounds
+    let hitWall = false;
     if (body.blocked.left) {
       this.rollDirection = 1;
-      body.setVelocityX(this.rollSpeed * this.rollDirection);
       this.flipX = false;
+      hitWall = true;
     } else if (body.blocked.right) {
       this.rollDirection = -1;
-      body.setVelocityX(this.rollSpeed * this.rollDirection);
       this.flipX = true;
+      hitWall = true;
     }
 
-    // Check if we've traveled across the arena (past opposite wall threshold)
-    const pastLeftEdge = this.rollDirection === -1 && body.blocked.left;
-    const pastRightEdge = this.rollDirection === 1 && body.blocked.right;
-
-    if (pastLeftEdge || pastRightEdge) {
+    if (hitWall) {
       // After bouncing off wall, decide: poke or roll again
       if (this.rollCount >= this.rollsBeforePoke) {
         this.enterPoking();
       } else {
-        // Continue rolling, alternate direction already handled above
+        // Continue rolling in new direction
         this.rollCount++;
+        body.setVelocityX(this.rollSpeed * this.rollDirection);
       }
     }
   }

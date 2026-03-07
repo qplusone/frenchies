@@ -50,6 +50,10 @@ export class BossScene extends Phaser.Scene {
   }
 
   create(): void {
+    // Reset state that persists across scene restarts (constructor doesn't re-run)
+    this.bossDefeated = false;
+    this.victorySequenceStarted = false;
+
     const { arenaWidth, arenaHeight } = this.sceneConfig;
     const groundY = this.sceneConfig.groundY ?? (arenaHeight - 16);
 
