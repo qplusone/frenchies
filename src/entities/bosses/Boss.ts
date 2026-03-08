@@ -37,7 +37,6 @@ export abstract class Boss extends Phaser.Physics.Arcade.Sprite {
     this.phaseThresholds = config.phaseThresholds;
 
     const body = this.body as Phaser.Physics.Arcade.Body;
-    body.setImmovable(true);
     body.setAllowGravity(true);
     body.setCollideWorldBounds(true);
 

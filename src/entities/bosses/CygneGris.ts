@@ -56,6 +56,7 @@ export class CygneGris extends Boss {
 
     const body = this.body as Phaser.Physics.Arcade.Body;
     body.setAllowGravity(false);
+    body.setCollideWorldBounds(false);
 
     this.cloneGroup = this.scene.physics.add.group({
       allowGravity: false,
