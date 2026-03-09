@@ -159,9 +159,7 @@ export class MonsieurEscargot extends Boss {
     // Check phase transitions after vulnerability window closes
     this.checkPhaseTransition();
 
-    // Alternate direction for next roll
-    this.rollDirection *= -1;
-    this.flipX = this.rollDirection === -1;
+    // Direction was already set by updateRolling() wall-bounce; don't flip again
 
     // Return to idle before next attack cycle
     this.bossState = 'idle';

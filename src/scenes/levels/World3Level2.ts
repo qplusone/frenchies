@@ -124,7 +124,7 @@ export class World3Level2 extends GameScene {
 
     // Birthday candle (index 7) - hidden behind the nuage_noir in section 4
     // Player must brave the storm cloud on the low hidden route beneath pillars
-    this.addCollectible('birthday_candle', 40 * T, GROUND_Y - 1 * T - 12, {
+    this.addCollectible('birthday_candle', 41 * T, GROUND_Y - 1 * T - 12, {
       candleIndex: 7,
     });
 

@@ -497,9 +497,14 @@ export class CygneGris extends Boss {
       this.attackTimer = null;
     }
 
-    this.destroyAllClones();
-    this.cloneGroup.destroy(true);
-    this.diveZoneGroup.destroy(true);
+    // During scene shutdown (fromScene=true), Phaser's physics world has
+    // already destroyed groups before UpdateList calls destroy() on sprites.
+    // Accessing the group's children would crash.
+    if (!fromScene) {
+      this.destroyAllClones();
+      this.cloneGroup.destroy(true);
+      this.diveZoneGroup.destroy(true);
+    }
 
     super.destroy(fromScene);
   }
