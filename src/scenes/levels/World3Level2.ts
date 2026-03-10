@@ -79,7 +79,6 @@ export class World3Level2 extends GameScene {
     this.addPlatform(44 * T, GROUND_Y - 5 * T, 2);
     // Low hidden route beneath the pillars
     this.addGroundRow(35 * T, GROUND_Y, 3);
-    this.addPlatform(40 * T, GROUND_Y - 1 * T, 2);
 
     // --- Section 5: Recovery zone (tiles 48-55) ---
     this.addGroundRow(48 * T, GROUND_Y, 8);
@@ -122,9 +121,9 @@ export class World3Level2 extends GameScene {
     // Choquette (heal) after the tough pillar section
     this.addCollectible('choquette', 51 * T, GROUND_Y - 4 * T - 12);
 
-    // Birthday candle (index 7) - hidden behind the nuage_noir in section 4
-    // Player must brave the storm cloud on the low hidden route beneath pillars
-    this.addCollectible('birthday_candle', 41 * T, GROUND_Y - 1 * T - 12, {
+    // Birthday candle (index 7) - on the low hidden route beneath pillars
+    // Player must brave the storm cloud to reach it on the ground row
+    this.addCollectible('birthday_candle', 37 * T, GROUND_Y - 12, {
       candleIndex: 7,
     });
 

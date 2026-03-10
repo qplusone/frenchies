@@ -177,11 +177,11 @@ export class World4Level1 extends GameScene {
     this.addCollectible('macaron', 49 * T, GROUND_Y - 3 * T - 12);
 
     // === HIDDEN BIRTHDAY CANDLE (index 9) ===
-    // Below the "bottomless" gap at tile 49-50, a hidden platform sits
-    // just below the visible screen area. The player must take a leap of
-    // faith down from the first floating platform to find it.
-    this.addPlatform(49 * T, GROUND_Y + 2 * T, 3); // y=240, below normal ground
-    this.addCollectible('birthday_candle', 50 * T, GROUND_Y + 2 * T - 12, {
+    // A hidden platform sits just below the first floating platform.
+    // The player must drop down from the crossing platform to find it,
+    // then jump back up to continue.
+    this.addPlatform(49 * T, GROUND_Y - 1 * T, 3); // y=192, hidden below crossing
+    this.addCollectible('birthday_candle', 50 * T, GROUND_Y - 1 * T - 12, {
       candleIndex: 9,
     });
 
@@ -204,17 +204,17 @@ export class World4Level1 extends GameScene {
     // Grand column gateway to the level end
     // =============================================
 
-    // Column 6: gate left pillar (2 wide, 6 tall)
-    this.addGroundBlock(60 * T, GROUND_Y - 6 * T, 2, 6);
+    // Column 6: gate left pillar (2 wide, 4 tall)
+    this.addGroundBlock(60 * T, GROUND_Y - 4 * T, 2, 4);
 
-    // Column 7: gate right pillar (2 wide, 6 tall)
-    this.addGroundBlock(66 * T, GROUND_Y - 6 * T, 2, 6);
+    // Column 7: gate right pillar (2 wide, 4 tall)
+    this.addGroundBlock(66 * T, GROUND_Y - 4 * T, 2, 4);
 
     // Ground continues through the gate
     this.addGroundRow(62 * T, GROUND_Y, 10);
 
     // Platform archway between gate pillars
-    this.addPlatform(62 * T, GROUND_Y - 6 * T, 4);
+    this.addPlatform(62 * T, GROUND_Y - 4 * T, 4);
 
     // Final macarons through the gateway
     this.addCollectible('macaron', 63 * T, GROUND_Y - 12);

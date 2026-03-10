@@ -22,6 +22,9 @@ export class PauseMenu extends Phaser.Scene {
     this.menuItems = [];
     this.selectedIndex = 0;
 
+    // Ensure pause menu renders on top of all other scenes (game, HUD, etc.)
+    this.scene.bringToTop();
+
     // Semi-transparent overlay
     const overlay = this.add.graphics();
     overlay.fillStyle(0x000000, 0.7);
