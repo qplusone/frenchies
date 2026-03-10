@@ -238,32 +238,24 @@ export class World4Level2 extends GameScene {
       webRadius: 24,
     });
 
-    // === SECRET DETOUR: The Hidden Chamber ===
+    // === SECRET DETOUR: Hidden platform beneath the gap ===
     // Gap in ground at tiles 44-46 (looks like a death pit)
     // tiles 44-46 have NO ground row -- the ground row above stops at 43
 
     // Ground resumes after the gap at tile 47
     this.addGroundRow(47 * T, GROUND_Y, 6); // tiles 47-52
 
-    // Hidden platforms BELOW the gap, descending like a shaft
-    // Player must drop down from tile 44 area
-    this.addPlatform(44 * T, GROUND_Y + 2 * T, 2); // y=240, just below screen
-    this.addPlatform(43 * T, GROUND_Y + 4 * T, 2); // y=272, deeper shaft
-    this.addPlatform(45 * T, GROUND_Y + 6 * T, 3); // y=304, bottom chamber
+    // Hidden platform just below the gap edge — player must drop down
+    // from tile 43 to find it, then jump back up to tile 47
+    this.addPlatform(44 * T, GROUND_Y - 1 * T, 3); // y=192, hidden below gap
 
     // === BIRTHDAY CANDLE (index 10) -- THE FINAL CANDLE ===
-    // Sitting at the very bottom of the hidden chamber.
-    // This is the hardest candle in the game: requires a leap of faith
-    // into what looks like a bottomless pit, then precise platforming
-    // down the shaft to reach it.
-    this.addCollectible('birthday_candle', 46 * T, GROUND_Y + 6 * T - 12, {
+    // On the hidden platform beneath the gap. The player must take a
+    // leap of faith off the edge, land on the hidden platform, collect
+    // the candle, then jump back up to continue.
+    this.addCollectible('birthday_candle', 45 * T, GROUND_Y - 1 * T - 12, {
       candleIndex: 10,
     });
-
-    // Escape platform: leads back up from the chamber
-    this.addPlatform(47 * T, GROUND_Y + 4 * T, 2); // y=272
-    this.addPlatform(48 * T, GROUND_Y + 2 * T, 2); // y=240
-    // Player can climb back up to the ground at tile 47-52
 
     // =============================================
     // SECTION 5: The Vertical Maze (tiles 47-60)
