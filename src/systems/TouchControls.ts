@@ -75,9 +75,6 @@ export class TouchControls {
     scene.input.on('pointerdown', (pointer: Phaser.Input.Pointer) => this.handlePointerDown(pointer));
     scene.input.on('pointermove', (pointer: Phaser.Input.Pointer) => this.handlePointerMove(pointer));
     scene.input.on('pointerup', (pointer: Phaser.Input.Pointer) => this.handlePointerUp(pointer));
-
-    // Enable multi-touch
-    scene.input.addPointer(2); // Support up to 3 simultaneous touches
   }
 
   private createButton(
@@ -135,12 +132,10 @@ export class TouchControls {
   private handlePointerDown(pointer: Phaser.Input.Pointer): void {
     if (!this.visible || !this.scene) return;
 
-    // Convert screen coordinates to game coordinates
-    const cam = this.scene.cameras.main;
-    const gx = (pointer.x - cam.x) / cam.zoom;
-    const gy = (pointer.y - cam.y) / cam.zoom;
-
-    const zone = this.getZoneForPoint(gx, gy);
+    // pointer.x / pointer.y are already in game canvas coordinates (Phaser
+    // handles device-pixel-ratio and scale). Button zones are in screen
+    // space (scrollFactor 0), so use pointer coords directly.
+    const zone = this.getZoneForPoint(pointer.x, pointer.y);
     if (zone) {
       this.activePointers.set(`${pointer.id}_${zone}`, pointer.id);
       this.setButtonState(zone, true);

@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>Jardin des Frenchies</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -14,7 +14,8 @@
       align-items: center;
       justify-content: center;
     }
-    canvas { image-rendering: pixelated; image-rendering: crisp-edges; }
+    canvas { image-rendering: pixelated; image-rendering: crisp-edges; touch-action: none; -webkit-user-select: none; user-select: none; }
+    #game-container { touch-action: none; -webkit-user-select: none; user-select: none; }
   </style>
 </head>
 <body>
