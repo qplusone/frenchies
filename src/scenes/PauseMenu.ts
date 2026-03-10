@@ -18,6 +18,10 @@ export class PauseMenu extends Phaser.Scene {
   }
 
   create(): void {
+    // Reset state from any previous launch (scene instance is reused)
+    this.menuItems = [];
+    this.selectedIndex = 0;
+
     // Semi-transparent overlay
     const overlay = this.add.graphics();
     overlay.fillStyle(0x000000, 0.7);

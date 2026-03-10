@@ -50,8 +50,8 @@ export class World4Level1 extends GameScene {
     // =============================================
     this.addGroundRow(0, GROUND_Y, 11);
 
-    // Column 1: imposing pillar at tile 9-10 (2 wide, 6 tall)
-    this.addGroundBlock(9 * T, GROUND_Y - 6 * T, 2, 6);
+    // Column 1: imposing pillar at tile 9-10 (2 wide, 4 tall)
+    this.addGroundBlock(9 * T, GROUND_Y - 4 * T, 2, 4);
 
     // Macarons along the opening
     this.addCollectible('macaron', 3 * T, GROUND_Y - 12);

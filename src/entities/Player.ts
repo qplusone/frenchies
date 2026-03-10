@@ -105,17 +105,19 @@ export abstract class Player extends Phaser.Physics.Arcade.Sprite {
       return;
     }
 
-    // Horizontal movement
-    if (this.isLeftPressed) {
-      body.setVelocityX(-PLAYER_SPEED);
-      this.setFlipX(true);
-      this.facingRight = false;
-    } else if (this.isRightPressed) {
-      body.setVelocityX(PLAYER_SPEED);
-      this.setFlipX(false);
-      this.facingRight = true;
-    } else {
-      body.setVelocityX(0);
+    // Horizontal movement (skip during attack to preserve pounce/dash velocity)
+    if (this.state !== 'attack') {
+      if (this.isLeftPressed) {
+        body.setVelocityX(-PLAYER_SPEED);
+        this.setFlipX(true);
+        this.facingRight = false;
+      } else if (this.isRightPressed) {
+        body.setVelocityX(PLAYER_SPEED);
+        this.setFlipX(false);
+        this.facingRight = true;
+      } else {
+        body.setVelocityX(0);
+      }
     }
 
     // Jumping

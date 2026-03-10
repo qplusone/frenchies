@@ -79,7 +79,7 @@ export class World3Level2 extends GameScene {
     this.addPlatform(44 * T, GROUND_Y - 5 * T, 2);
     // Low hidden route beneath the pillars
     this.addGroundRow(35 * T, GROUND_Y, 3);
-    this.addPlatform(39 * T, GROUND_Y - 1 * T, 2);
+    this.addPlatform(40 * T, GROUND_Y - 1 * T, 2);
 
     // --- Section 5: Recovery zone (tiles 48-55) ---
     this.addGroundRow(48 * T, GROUND_Y, 8);
