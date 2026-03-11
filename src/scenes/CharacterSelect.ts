@@ -95,13 +95,21 @@ export class CharacterSelect extends Phaser.Scene {
 
     // Input handling
     this.poppletonSprite.on('pointerdown', () => {
-      this.selected = 'poppleton';
-      this.updateSelector();
+      if (this.selected === 'poppleton') {
+        this.confirmSelection();
+      } else {
+        this.selected = 'poppleton';
+        this.updateSelector();
+      }
     });
 
     this.zackoSprite.on('pointerdown', () => {
-      this.selected = 'zacko';
-      this.updateSelector();
+      if (this.selected === 'zacko') {
+        this.confirmSelection();
+      } else {
+        this.selected = 'zacko';
+        this.updateSelector();
+      }
     });
 
     const leftKey = this.input.keyboard!.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT);
@@ -119,7 +127,7 @@ export class CharacterSelect extends Phaser.Scene {
     spaceKey.on('down', () => this.confirmSelection());
 
     // Prompt
-    this.add.text(GAME_WIDTH / 2, GAME_HEIGHT - 20, 'Press ENTER to start', {
+    this.add.text(GAME_WIDTH / 2, GAME_HEIGHT - 20, 'Tap or press ENTER to start', {
       fontSize: '7px',
       color: '#aaaaaa',
       fontFamily: 'monospace',

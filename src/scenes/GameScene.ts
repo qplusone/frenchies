@@ -178,6 +178,19 @@ export class GameScene extends Phaser.Scene {
     escKey.on('down', () => this.openPauseMenu());
     pKey.on('down', () => this.openPauseMenu());
 
+    // Touch pause button (top-right corner, visible on touch devices)
+    if (TouchControls.isTouchDevice()) {
+      const pauseBtn = this.add.text(GAME_WIDTH - 4, 4, '| |', {
+        fontSize: '8px',
+        fontFamily: 'monospace',
+        color: '#ffffff',
+        stroke: '#000000',
+        strokeThickness: 2,
+      }).setOrigin(1, 0).setScrollFactor(0).setDepth(200).setAlpha(0.5).setInteractive();
+
+      pauseBtn.on('pointerdown', () => this.openPauseMenu());
+    }
+
     // Mobile touch controls
     TouchControls.getInstance().create(this);
   }
