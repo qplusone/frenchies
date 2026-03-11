@@ -258,6 +258,55 @@ export class WorldMap extends Phaser.Scene {
 
     enterKey.on('down', () => this.confirm());
     escKey.on('down', () => this.goBack());
+
+    // Touch / pointer support
+    this.input.on('pointerdown', (pointer: Phaser.Input.Pointer) => {
+      this.handleTap(pointer.x, pointer.y);
+    });
+  }
+
+  private handleTap(px: number, py: number): void {
+    const gm = GameManager.instance;
+
+    if (this.mode === 'world') {
+      // Check if a world node was tapped (within 18px radius of center)
+      for (let i = 0; i < this.worldNodes.length; i++) {
+        const node = this.worldNodes[i];
+        const dist = Phaser.Math.Distance.Between(px, py, node.x, node.y);
+        if (dist <= 18 && gm.isWorldUnlocked(node.worldNum)) {
+          if (i === this.selectedWorld) {
+            // Tap the already-selected world to enter it
+            this.confirm();
+          } else {
+            this.selectedWorld = i;
+            this.drawWorldNodes();
+            this.updateCharacterPosition(true);
+            AudioManager.getInstance().playSFX('menuSelect');
+          }
+          return;
+        }
+      }
+    } else if (this.mode === 'level') {
+      const world = this.worldNodes[this.selectedWorld];
+      // Check if a level row was tapped
+      for (let i = 0; i < world.levels.length; i++) {
+        const y = 50 + i * 36;
+        if (px >= 24 && px <= GAME_WIDTH - 24 && py >= y - 8 && py <= y + 20) {
+          if (this.isLevelUnlocked(world.worldNum, world.levels[i].levelNum)) {
+            if (i === this.selectedLevel) {
+              this.confirm();
+            } else {
+              this.selectedLevel = i;
+              this.drawLevelNodes();
+              AudioManager.getInstance().playSFX('menuSelect');
+            }
+          }
+          return;
+        }
+      }
+      // Tap outside level boxes goes back
+      this.goBack();
+    }
   }
 
   private navigate(direction: number): void {

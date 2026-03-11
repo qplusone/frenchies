@@ -264,6 +264,41 @@ export class Gallery extends Phaser.Scene {
     downKey.on('down', () => this.moveCursor(0, 1));
     enterKey.on('down', () => this.tryUnlock());
     escKey.on('down', () => this.goBack());
+
+    // Touch / pointer support
+    this.input.on('pointerdown', (pointer: Phaser.Input.Pointer) => {
+      this.handleTap(pointer.x, pointer.y);
+    });
+  }
+
+  private handleTap(px: number, py: number): void {
+    // Check if a painting cell was tapped
+    for (let row = 0; row < ROWS; row++) {
+      for (let col = 0; col < COLUMNS; col++) {
+        const cx = GRID_LEFT + col * CELL_SPACING_X + PAINTING_W / 2;
+        const cy = GRID_TOP + row * CELL_SPACING_Y + PAINTING_H / 2;
+        const halfW = PAINTING_W / 2 + FRAME_PAD;
+        const halfH = PAINTING_H / 2 + FRAME_PAD;
+
+        if (px >= cx - halfW && px <= cx + halfW && py >= cy - halfH && py <= cy + halfH) {
+          if (row === this.cursorRow && col === this.cursorCol) {
+            // Already selected — try to unlock
+            this.tryUnlock();
+          } else {
+            this.cursorCol = col;
+            this.cursorRow = row;
+            this.updateCursor();
+            AudioManager.getInstance().playSFX('menuSelect');
+          }
+          return;
+        }
+      }
+    }
+
+    // Tap outside the grid area near bottom = go back
+    if (py > GAME_HEIGHT - 20) {
+      this.goBack();
+    }
   }
 
   private moveCursor(dx: number, dy: number): void {

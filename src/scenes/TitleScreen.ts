@@ -190,7 +190,13 @@ export class TitleScreen extends Phaser.Scene {
         color: '#aaaaaa',
         stroke: '#000000',
         strokeThickness: 2,
-      }).setOrigin(0.5);
+      }).setOrigin(0.5).setInteractive();
+
+      text.on('pointerdown', () => {
+        this.selectedIndex = i;
+        this.updateMenuHighlight();
+        this.confirmSelection();
+      });
 
       this.menuItems.push(text);
       this.menuActions.push(item.action);
